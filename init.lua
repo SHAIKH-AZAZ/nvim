@@ -16,6 +16,7 @@ local opts = {}
 require("lazy").setup("plugins", opts)
 
 require("vim-options")
+
 --require catppuccin
 
 
