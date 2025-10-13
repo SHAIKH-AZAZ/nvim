@@ -13,9 +13,11 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local opts = {}
+
+-- for keyMaps and basic setups 
+require("vim-options")
 require("lazy").setup("plugins", opts)
 
-require("vim-options")
 
 --require catppuccin
 

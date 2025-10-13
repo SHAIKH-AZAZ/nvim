@@ -1,26 +1,41 @@
 return {
   {
-    "mason-org/mason.nvim",
-    opts = {}
+    "williamboman/mason.nvim",
+    config = function()
+      require("mason").setup()
+    end,
   },
   {
-    "mason-org/mason-lspconfig.nvim",
-    opts = {
-      ensure_installed = {
-        "lua_ls", "rust_analyzer", "ts_ls", "pyright", "eslint", "jsonls", "html", "cssls"
-      }
-    }
-
+    "williamboman/mason-lspconfig.nvim",
+    config = function()
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          "lua_ls", "ts_ls" ,
+        },
+      })
+    end,
   },
   {
     "neovim/nvim-lspconfig",
     config = function()
-      vim.lsp.enable("ts_ls");
-      vim.lsp.enable("lua_ls");
+      -- ✅ Use new API if available (Neovim 0.11+), otherwise fallback
+      local lspconfig = (vim.lsp and vim.lsp.config) or require("lspconfig")
 
-      vim.keymap.set('n' , 'K' , vim.lsp.buf.hover , {})
-      vim.keymap.set('n' , 'gd' , vim.lsp.buf.definition , {})
-      vim.keymap.set({'n' , 'v'} , '<leader>ca' , vim.lsp.buf.code_action , {})
-    end
-  }
+      -- Setup language servers safely
+      local servers = { "lua_ls", "tsserver", "pyright", "rust_analyzer" }
+
+      for _, server in ipairs(servers) do
+        if lspconfig[server] and lspconfig[server].setup then
+          lspconfig[server].setup({})
+        else
+          vim.notify("LSP: setup not found for " .. server, vim.log.levels.WARN)
+        end
+      end
+
+      -- Keymaps for LSP
+      vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
+      vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+      vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+    end,
+  },
 }
