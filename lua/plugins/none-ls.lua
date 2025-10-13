@@ -5,6 +5,9 @@ return {
         config = function()
             local null_ls = require("null-ls")
 
+            -- CREATE THE AUTOCMD GROUP (add this line)
+            local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
             null_ls.setup({
                 sources = {
                     -- =========================
@@ -35,12 +38,11 @@ return {
                 -- =========================
                 on_attach = function(client, bufnr)
                     if client.supports_method("textDocument/formatting") then
-                        vim.api.nvim_clear_autocmds({ group = 0, buffer = bufnr })
+                        vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })  -- CHANGED: use augroup variable
                         vim.api.nvim_create_autocmd("BufWritePre", {
-                            group = 0,
+                            group = augroup,  -- CHANGED: use augroup variable
                             buffer = bufnr,
                             callback = function()
-                                -- modern replacement for formatting_sync
                                 vim.lsp.buf.format({ bufnr = bufnr })
                             end,
                         })
