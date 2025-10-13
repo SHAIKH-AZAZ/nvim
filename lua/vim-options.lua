@@ -7,5 +7,5 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.termguicolors = true
 vim.g.mapleader = " "   -- space is common
-vim.g.maplocalleader = " "  -- optional, for local leader
+vim.g.maplocalleader = "/"  -- optional, for local leader
 
