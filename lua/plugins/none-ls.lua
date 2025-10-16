@@ -2,10 +2,12 @@
 return {
     {
         "nvimtools/none-ls.nvim",
+        dependencies = { "nvim-lua/plenary.nvim", "nvimtools/none-ls-extras.nvim" },
         config = function()
-            local null_ls = require("null-ls")
+            -- ✅ Use the new module name
+            local null_ls = require("none-ls")
 
-            -- CREATE THE AUTOCMD GROUP (add this line)
+            -- ✅ Create a formatting group
             local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
             null_ls.setup({
@@ -14,23 +16,22 @@ return {
                     -- Formatting
                     -- =========================
                     null_ls.builtins.formatting.prettier, -- JS, TS, JSX, CSS, Tailwind, HTML, JSON, Markdown
-                    null_ls.builtins.formatting.stylua, -- Lua
-                    null_ls.builtins.formatting.eslint_d, -- JS/TS autofix
+                    null_ls.builtins.formatting.stylua,   -- Lua
 
                     -- =========================
                     -- Diagnostics
                     -- =========================
-                    null_ls.builtins.diagnostics.eslint_d, -- JS/TS linting
-                    null_ls.builtins.diagnostics.stylelint, -- CSS/SCSS/Tailwind linting
-                    null_ls.builtins.diagnostics.markdownlint, -- Markdown linting
-                    null_ls.builtins.diagnostics.jsonlint, -- JSON linting
+                    require("none-ls.diagnostics.eslint_d"),   -- JS/TS linting (moved to none-ls-extras)
+                    require("none-ls.diagnostics.stylelint"),  -- CSS/SCSS/Tailwind linting
+                    require("none-ls.diagnostics.markdownlint"),
+                    -- ❌ jsonlint removed — deprecated (use `jq` or `jsonls` LSP for JSON)
 
                     -- =========================
                     -- Code Actions
                     -- =========================
-                    null_ls.builtins.code_actions.eslint_d, -- JS/TS fixable actions
-                    null_ls.builtins.code_actions.gitsigns, -- Git actions (optional)
-                    null_ls.builtins.completion.spell, -- Spell checking
+                    require("none-ls.code_actions.eslint_d"),  -- JS/TS fixable actions
+                    null_ls.builtins.code_actions.gitsigns,    -- Git actions
+                    null_ls.builtins.completion.spell,         -- Spell checking
                 },
 
                 -- =========================
@@ -38,9 +39,9 @@ return {
                 -- =========================
                 on_attach = function(client, bufnr)
                     if client.supports_method("textDocument/formatting") then
-                        vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })  -- CHANGED: use augroup variable
+                        vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
                         vim.api.nvim_create_autocmd("BufWritePre", {
-                            group = augroup,  -- CHANGED: use augroup variable
+                            group = augroup,
                             buffer = bufnr,
                             callback = function()
                                 vim.lsp.buf.format({ bufnr = bufnr })
@@ -55,10 +56,6 @@ return {
                 vim.lsp.buf.format({ async = true })
             end, {})
         end,
-    },
-
-    {
-        "nvimtools/none-ls-extras.nvim", -- required for eslint diagnostics
     },
 }
 
