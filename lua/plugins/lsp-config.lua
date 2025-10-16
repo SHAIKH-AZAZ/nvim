@@ -11,27 +11,27 @@ return {
 			require("mason-lspconfig").setup({
 				ensure_installed = {
 					"lua_ls",
-          "ts_ls",
+					"ts_ls",
 				},
 			})
 		end,
 	},
 	{
 		"neovim/nvim-lspconfig",
-    config = function()
+		config = function()
+			vim.lsp.config("lua_ls", {})
+			vim.lsp.config("ts_ls", {})
+			vim.lsp.config("tsserver", {})
+			vim.lsp.enable("tsserver")
+			vim.lsp.enable("lua_ls")
+			vim.lsp.enable("ts_ls")
 
-      vim.lsp.config('lua_ls' , {})
-      vim.lsp.config('ts_ls' , {})
-      vim.lsp.enable('lua_ls')
-      vim.lsp.enable('ts_ls')
-
-      -- Keymaps for LSP
-	  vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-	  vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
-	  vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {
-        desc = "LSP code action , suggested actions"
-
-      })
-  end,
-  },
+			-- Keymaps for LSP
+			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
+			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {
+				desc = "LSP code action , suggested actions",
+			})
+		end,
+	},
 }
