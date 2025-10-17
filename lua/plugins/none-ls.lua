@@ -13,7 +13,7 @@ return {
 					null_ls.builtins.formatting.stylua,
 					null_ls.builtins.completion.spell,
 					null_ls.builtins.completion.prettier,
-					null_ls.builtins.completion.eslint_d,
+					-- null_ls.builtins.completion.eslint_d,
 					-- eslint diagnostic will only work after extras is installed
 				},
 			})
