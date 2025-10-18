@@ -11,7 +11,7 @@ return {
 			-- Enable syntax highlighting
 			highlight = {
 				enable = true,
-				additional_vim_regex_highlighting = false,
+				additional_vim_regex_highlighting = true,
 			},
 
 			-- Enable indentation based on treesitter
