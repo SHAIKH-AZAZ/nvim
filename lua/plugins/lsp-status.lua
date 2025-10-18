@@ -2,7 +2,13 @@ return {
   "nvim-lua/lsp-status.nvim",
   event = "LspAttach",
   config = function()
-    require("lsp-status").setup()
+    local lsp_status = require("lsp-status")
+    -- This works like .setup()
+    lsp_status.setup({
+      status_symbol = "🔧",
+      current_function = true,
+      show_filename = true,
+    })
   end,
 }
 

@@ -1,43 +1,71 @@
+
 return {
-	"nvim-treesitter/nvim-treesitter",
-	build = ":TSUpdate", -- update parsers automatically
-	config = function()
-		local ts_configs = require("nvim-treesitter.configs")
+  "nvim-treesitter/nvim-treesitter",
+  build = ":TSUpdate",
+  dependencies = {
+    -- Modern maintained rainbow plugin
+    "HiPhish/rainbow-delimiters.nvim",
+  },
+  config = function()
+    local ts_configs = require("nvim-treesitter.configs")
 
-		ts_configs.setup({
-			-- Parsers to install
-			ensure_installed = { "lua", "javascript", "typescript", "python", "html", "css" },
-			auto_install = true,
-			-- Enable syntax highlighting
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = true,
-			},
+    ts_configs.setup({
+      ensure_installed = {
+        "lua",
+        "javascript",
+        "typescript",
+        "python",
+        "html",
+        "css",
+        "json",
+        "bash",
+        "vim",
+        "markdown",
+      },
+      auto_install = true,
 
-			-- Enable indentation based on treesitter
-			indent = {
-				enable = true,
-			},
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false, -- safer
+      },
 
-			-- Incremental selection
-			incremental_selection = {
-				enable = true,
-				keymaps = {
-					init_selection = "gnn",
-					node_incremental = "grn",
-					scope_incremental = "grc",
-					node_decremental = "grm",
-				},
-			},
+      indent = {
+        enable = true,
+      },
 
-			-- Rainbow parentheses
-			rainbow = {
-				extended_mode = true,
-				max_file_lines = nil,
-			},
-		})
-	end,
-	dependencies = {
-		"p00f/nvim-ts-rainbow", -- rainbow plugin dependency
-	},
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "gnn",
+          node_incremental = "grn",
+          scope_incremental = "grc",
+          node_decremental = "grm",
+        },
+      },
+    })
+
+    -- Rainbow delimiters (replaces old ts-rainbow)
+    local rainbow_delimiters = require("rainbow-delimiters")
+
+    vim.g.rainbow_delimiters = {
+      strategy = {
+        [""] = rainbow_delimiters.strategy["global"],
+        vim = rainbow_delimiters.strategy["local"],
+      },
+      query = {
+        [""] = "rainbow-delimiters",
+        lua = "rainbow-blocks",
+      },
+      highlight = {
+        "RainbowDelimiterRed",
+        "RainbowDelimiterYellow",
+        "RainbowDelimiterBlue",
+        "RainbowDelimiterOrange",
+        "RainbowDelimiterGreen",
+        "RainbowDelimiterViolet",
+        "RainbowDelimiterCyan",
+      },
+    }
+  end,
 }
+

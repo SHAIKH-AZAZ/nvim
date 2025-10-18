@@ -1,6 +1,9 @@
 {
     "diagnostics.globals": [
         "vim",
-        "Snacks"
+        "Snacks",
+        "session_suppress_dirs",
+        "session",
+        "auto_session_suppress_dirs"
     ]
 }
