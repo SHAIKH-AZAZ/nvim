@@ -4,6 +4,7 @@
         "Snacks",
         "session_suppress_dirs",
         "session",
-        "auto_session_suppress_dirs"
+        "auto_session_suppress_dirs",
+        "ts_configs"
     ]
 }
