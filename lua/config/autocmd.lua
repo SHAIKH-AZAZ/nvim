@@ -125,3 +125,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 		vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
 	end,
 })
+
+
+vim.keymap.set('n' , "dgl" ,function() vim.diagnostic.open_float() end , {desc = "Open diagnostic in floating window "} )
