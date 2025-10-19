@@ -13,7 +13,13 @@ return {
 		local actions = require("telescope.actions")
 		local builtin = require("telescope.builtin")
 
-		telescope.load_extension("fzf")
+		{
+            "<leader>fo",
+            function()
+                require("fzf-lua").oldfiles()
+            end,
+            desc = "[F]ind [O]ld Files",
+        }telescope.load_extension("fzf")
 		telescope.load_extension("themes")
 
 		telescope.setup({
