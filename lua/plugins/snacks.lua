@@ -85,7 +85,7 @@ return {
       desc = "Find Config File",
     },
     {
-      "<leader>ff",
+      "<C-p>",
       function()
         Snacks.picker.files()
       end,
