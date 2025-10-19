@@ -126,5 +126,10 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	end,
 })
 
-
-vim.keymap.set('n' , "dgl" ,function() vim.diagnostic.open_float() end , {desc = "Open diagnostic in floating window "} )
+vim.keymap.set("n", "dgl", function()
+	vim.diagnostic.open_float()
+end, { desc = "Open diagnostic in floating window " })
+vim.keymap.set("n", "<leader>cf", function()
+	require("conform").format()
+end, { desc = "code formatter" })
+--

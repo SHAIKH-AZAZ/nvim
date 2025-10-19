@@ -6,17 +6,35 @@ return {
 
 		conform.setup({
 			formatters_by_ft = {
+
 				-- Web development
-				javascript = { "prettier" },
-				typescript = { "prettier" },
-				javascriptreact = { "prettier" },
-				typescriptreact = { "prettier" },
-				css = { "prettier" },
-				html = { "prettier" },
-				json = { "prettier" },
+				javascript = {
+					"prettier",
+				},
+				typescript = {
+					"prettier",
+				},
+				javascriptreact = {
+					"prettier",
+				},
+				typescriptreact = {
+					"prettier",
+				},
+				css = {
+					"prettier",
+				},
+				html = {
+					"prettier",
+				},
+				json = {
+					"prettier",
+				},
+
 				yaml = { "prettier" },
+
 				markdown = { "prettier" },
-				graphql = { "prettier" },
+
+				-- graphql = { "prettier" },
 
 				-- Lua
 				lua = { "stylua" },
@@ -25,18 +43,20 @@ return {
 				python = { "isort", "black" },
 
 				-- Go
-				go = { "gofmt", "goimports" },
+				-- go = { "gofmt", "goimports" },
 
 				-- Rust
-				rust = { "rustfmt" },
+				-- rust = { "rustfmt" },
 
 				-- Shell
 				sh = { "shfmt" },
+
 				bash = { "shfmt" },
+
 				zsh = { "shfmt" },
 
 				-- TOML
-				toml = { "taplo" },
+				-- toml = { "taplo" },
 
 				-- Use the "*" filetype to run formatters on all filetypes
 				["*"] = { "trim_whitespace" },
@@ -61,12 +81,12 @@ return {
 
 		-- Keybindings
 		vim.keymap.set({ "n", "v" }, "<leader>lf", function()
-      conform.format({
-        lsp_format = "fallback",
-        async = false,
-        timeout_ms = 500,
-        format_on_save = true, 
-      })
+			conform.format({
+				lsp_format = "fallback",
+				async = false,
+				timeout_ms = 500,
+				format_on_save = true,
+			})
 		end, { desc = "Format file or range (in visual mode)" })
 	end,
 }

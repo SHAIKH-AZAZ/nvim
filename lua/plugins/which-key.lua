@@ -59,6 +59,13 @@ return {
 			end,
 			desc = "Window Hydra Mode (which-key)",
 		},
+		{
+			"s",
+			function()
+				require("which-key").show({ global = false })
+			end,
+			desc = " S key-maps",
+		},
 	},
 	config = function(_, opts)
 		local wk = require("which-key")
