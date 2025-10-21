@@ -80,9 +80,6 @@ return {
 				ghost_text = {
 					enabled = true,
 				},
-				documentation = {
-					auto_show = true,
-				},
 			},
 
 			-- (Default) Only show the documentation popup when manually triggered

@@ -15,11 +15,20 @@ local opts = {}
 
 -- for keyMaps and basic setups
 require("vim-options")
-
-
--- importing plugins from plugin folder
-require("lazy").setup("plugins", opts)
-
--- importing preconfigured 
-require("config.autocmd")
-
+-- Setup lazy.nvim and load plugins
+require("lazy").setup("plugins", {
+	checker = { enabled = true }, -- automatically check for plugin updates
+	performance = {
+		rtp = {
+			disabled_plugins = {
+				"gzip",
+				"tarPlugin",
+				"tohtml",
+				"tutor",
+				"zipPlugin",
+			},
+		},
+	},
+})
+-- require("config.options")
+require("core.autocmd")
