@@ -1,3 +1,6 @@
+-- DISABLED: Causing errors with current setup
+return {}
+--[[
 return {
   "nvim-lua/lsp-status.nvim",
   event = "LspAttach",
@@ -11,4 +14,5 @@ return {
     })
   end,
 }
+--]]
 

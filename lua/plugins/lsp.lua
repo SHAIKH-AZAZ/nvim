@@ -1,3 +1,6 @@
+-- DISABLED: Conflicting with blink.cmp setup
+return {}
+--[[
 return {
 	-- Main LSP Configuration
 	"neovim/nvim-lspconfig",
@@ -271,3 +274,4 @@ return {
 		})
 	end,
 }
+--]]
