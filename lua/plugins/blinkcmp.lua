@@ -13,6 +13,9 @@ return {
 		"saghen/blink.cmp",
 		-- optional: provides snippets for the snippet source
 		dependencies = {
+			{ "glepnir/lspsaga.nvim", branch = "main" },
+			"jose-elias-alvarez/typescript.nvim",
+			"onsails/lspkind.nvim",
 			"rafamadriz/friendly-snippets",
 			"moyiz/blink-emoji.nvim",
 			"ray-x/cmp-sql",
