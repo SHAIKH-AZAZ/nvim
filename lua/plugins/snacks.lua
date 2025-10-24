@@ -4,6 +4,7 @@ return {
 	lazy = false,
 	---@type snacks.Config
 	opts = {
+		explorer = { enabled = false },
 		bigfile = { enabled = true },
 		dashboard = { enabled = true },
 		explorer = { enabled = true },
@@ -25,7 +26,7 @@ return {
 			},
 		},
 		explorer = {
-			enabled = true,
+			enabled = false,
 			git = { enabled = true }, -- show git status symbols
 			watch = { enabled = true }, -- auto-refresh on file changes
 			icons = {

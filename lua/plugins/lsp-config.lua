@@ -18,6 +18,7 @@ return {
 					"cssls",
 					"tailwindcss",
 					"emmet_ls",
+					"jsonls",
 				},
 			})
 		end,
