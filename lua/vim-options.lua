@@ -19,7 +19,9 @@ vim.opt.mouse = "a"
 vim.opt.showmode = false
 
 -- indentation break
--- vim.opt.breakindent = true
+vim.opt.breakindent = true
+vim.opt.linebreak = true
+
 -- case indesitive searching in nvmi
 vim.opt.ignorecase = true
 vim.opt.smartcase = true

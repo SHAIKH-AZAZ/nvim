@@ -487,7 +487,7 @@ return {
 		{
 			"<c-/>",
 			function()
-				Snacks.terminal()
+				require("snacks.terminal").toggle()
 			end,
 			desc = "Toggle Terminal",
 		},
