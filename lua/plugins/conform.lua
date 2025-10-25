@@ -72,11 +72,11 @@ return {
 				lsp_format = "fallback",
 			},
 			-- Customize formatters
-			formatters = {
-				shfmt = {
-					prepend_args = { "-i", "2" }, -- 2 spaces indentation
-				},
-			},
+			-- formatters = {
+			-- 	shfmt = {
+			-- 		prepend_args = { "-i", "2" }, -- 2 spaces indentation
+			-- 	},
+			-- },
 		})
 
 		-- Keybindings

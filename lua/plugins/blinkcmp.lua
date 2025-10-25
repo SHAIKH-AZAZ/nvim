@@ -1,3 +1,5 @@
+return {}
+--[[
 return {
 	{
 		"saghen/blink.compat",
@@ -144,3 +146,5 @@ return {
 		opts_extend = { "sources.default" },
 	},
 }
+
+--]]

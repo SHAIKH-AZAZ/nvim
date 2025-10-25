@@ -71,7 +71,7 @@ vim.api.nvim_create_autocmd("FileType", {
 		"tsplayground",
 	},
 	callback = function(event)
-		vim.bo[event.buf].buflisted = false
+		vim.bo[event.buf].buflisted = true
 		vim.schedule(function()
 			vim.keymap.set("n", "q", function()
 				vim.cmd("close")
@@ -115,7 +115,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 
 -- Auto create dir when saving a file, in case some intermediate directory does not exist
 
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+vim.api.nvim_create_autocmd({
 	group = augroup("auto_create_dir"),
 	callback = function(event)
 		if event.match:match("^%w%w+:[\\/][\\/]") then
@@ -124,7 +124,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 		local file = vim.uv.fs_realpath(event.match) or event.match
 		vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
 	end,
-})
+}, { "BufWritePre" })
 
 vim.keymap.set("n", "dgl", function()
 	vim.diagnostic.open_float()

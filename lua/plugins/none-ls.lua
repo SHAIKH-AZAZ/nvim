@@ -1,61 +1,54 @@
 return {
-	{
-		"nvimtools/none-ls.nvim",
-		dependencies = {
-			"nvimtools/none-ls-extras.nvim",
-		},
-		config = function()
-			local null_ls = require("null-ls")
-
-      -- formatting
-      local formatting = {
-        null_ls.builtins.formatting.stylua,
-        null_ls.builtins.formatting.prettier,
-        null_ls.builtins.formatting.eslint_d,
-      }
-
-      local diagnostics = {
-				null_ls.builtins.diagnostics.eslint_d,     -- JS/TS linting
-				null_ls.builtins.diagnostics.stylelint,    -- CSS/Tailwind linting
-				null_ls.builtins.diagnostics.markdownlint, -- Markdown
-				null_ls.builtins.diagnostics.jsonlint,     -- JSON
-			}
-
-      local completion = {
-				null_ls.builtins.completion.spell, -- Spell completion
-			}
-
-
-      local all_sources = {}
-			vim.list_extend(all_sources, formatting)
-			vim.list_extend(all_sources, diagnostics)
-			vim.list_extend(all_sources, completion)
-
-			null_ls.setup({
-				sources = vim.list_extend({}, formatting),
-			})
-	   		null_ls.setup({
-				sources = vim.list_extend({}, formatting),
-			})
-
-			-- merge all sources in one table before setupf
-			local all_sources = vim.list_extend({}, formatting)
-			vim.list_extend(all_sources, diagnostics)
-			vim.list_extend(all_sources, completion)
-
-			--- final setup
-			null_ls.setup({
-				sources = all_sources,
-			})
-
-			vim.keymap.set("n", "<leader>gf", function()
-				vim.lsp.buf.format({ async = true })
-			end, { desc = "Format file with LSP" })
-		end,
-	},
-
-	{
+	"nvimtools/none-ls.nvim",
+	dependencies = {
 		"nvimtools/none-ls-extras.nvim",
-		lazy = true,
+		"jayp0521/mason-null-ls.nvim", -- ensure dependencies are installed
 	},
+	config = function()
+		local null_ls = require("null-ls")
+		local formatting = null_ls.builtins.formatting -- to setup formatters
+		local diagnostics = null_ls.builtins.diagnostics -- to setup linters
+
+		-- Formatters & linters for mason to install
+		require("mason-null-ls").setup({
+			ensure_installed = {
+				"prettier", -- ts/js formatter
+				"eslint_d", -- ts/js linter
+				"shfmt", -- Shell formatter
+				"checkmake", -- linter for Makefiles
+				-- 'stylua', -- lua formatter; Already installed via Mason
+				-- 'ruff', -- Python linter and formatter; Already installed via Mason
+			},
+			automatic_installation = true,
+		})
+
+		local sources = {
+			diagnostics.checkmake,
+			formatting.prettier.with({ filetypes = { "html", "json", "yaml", "markdown" } }),
+			formatting.stylua,
+			formatting.shfmt.with({ args = { "-i", "4" } }),
+			formatting.terraform_fmt,
+			require("none-ls.formatting.ruff").with({ extra_args = { "--extend-select", "I" } }),
+			require("none-ls.formatting.ruff_format"),
+		}
+
+		local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+		null_ls.setup({
+			-- debug = true, -- Enable debug mode. Inspect logs with :NullLsLog.
+			sources = sources,
+			-- you can reuse a shared lspconfig on_attach callback here
+			on_attach = function(client, bufnr)
+				if client:supports_method("textDocument/formatting") then
+					vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+					vim.api.nvim_create_autocmd("BufWritePre", {
+						group = augroup,
+						buffer = bufnr,
+						callback = function()
+							vim.lsp.buf.format({ async = false })
+						end,
+					})
+				end
+			end,
+		})
+	end,
 }

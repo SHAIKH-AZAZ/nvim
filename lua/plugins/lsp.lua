@@ -1,6 +1,5 @@
 -- DISABLED: Conflicting with blink.cmp setup
-return {}
---[[
+-- return {}
 return {
 	-- Main LSP Configuration
 	"neovim/nvim-lspconfig",
@@ -208,8 +207,8 @@ return {
 		--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 		local servers = {
 			-- clangd = {},
-			-- gopls = {},
-			-- pyright = {},
+			gopls = {},
+			pyright = {},
 			-- rust_analyzer = {},
 			-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 			--
@@ -219,6 +218,18 @@ return {
 			-- But for many setups, the LSP (`ts_ls`) will work just fine
 			ts_ls = {},
 			--
+			ruff = {},
+			pylsp = {
+				settings = {
+					pylsp = {
+						plugins = {
+							pyflakes = { enabled = false },
+							pycodestyle = { enabled = false },
+							autopep8 = { enabled = false },
+						},
+					},
+				},
+			},
 
 			lua_ls = {
 				-- cmd = { ... },
@@ -274,4 +285,3 @@ return {
 		})
 	end,
 }
---]]
