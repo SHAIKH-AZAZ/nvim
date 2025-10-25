@@ -1,48 +1,76 @@
+-- ============================================================================
+-- Catppuccin - Color Scheme
+-- ============================================================================
+-- Modern, pastel color scheme with 4 flavors: Latte, Frappe, Macchiato, Mocha
+-- Supports transparent backgrounds and extensive customization
+-- ============================================================================
+
 return {
 	"catppuccin/nvim",
 	name = "catppuccin",
-	priority = 1000,
+	priority = 1000, -- Load before other plugins (colorscheme needs to be first)
 	opts = {
 		transparent_background = false,
 	},
 	config = function(_, opts)
 		require("catppuccin").setup({
-			flavour = "auto", -- latte, frappe, macchiato, mocha
-			background = { -- :h background
-				light = "latte",
-				dark = "mocha",
+			-- ========================================
+			-- Flavor Selection
+			-- ========================================
+			flavour = "auto", -- auto, latte, frappe, macchiato, mocha
+			background = {
+				light = "latte", -- Use latte for light mode
+				dark = "mocha", -- Use mocha for dark mode
 			},
-			transparent_background = true, -- disables setting the background color.cat
+
+			-- ========================================
+			-- Transparency
+			-- ========================================
+			transparent_background = true, -- Make background transparent
 			float = {
-				transparent = false, -- enable transparent floating windows
-				solid = false, -- use solid styling for floating windows, see |winborder|
+				transparent = false, -- Floating windows have solid background
+				solid = false, -- Use border styling
 			},
-			show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
-			term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
+
+			-- ========================================
+			-- Visual Settings
+			-- ========================================
+			show_end_of_buffer = false, -- Hide '~' after file end
+			term_colors = false, -- Don't set terminal colors
 			dim_inactive = {
-				enabled = false, -- dims the background color of inactive window
+				enabled = false, -- Don't dim inactive windows
 				shade = "dark",
-				percentage = 0.15, -- percentage of the shade to apply to the inactive window
+				percentage = 0.15,
 			},
-			no_italic = false, -- Force no italic
-			no_bold = false, -- Force no bold
-			no_underline = false, -- Force no underline
-			styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
-				comments = { "italic" }, -- Change the style of comments
-				conditionals = { "italic" },
-				loops = {},
-				functions = {},
-				keywords = {},
-				strings = {},
-				variables = {},
-				numbers = {},
-				booleans = {},
-				properties = {},
-				types = {},
-				operators = {},
-				-- miscs = {}, -- Uncomment to turn off hard-coded styles
+
+			-- ========================================
+			-- Font Styles
+			-- ========================================
+			no_italic = false, -- Allow italic text
+			no_bold = false, -- Allow bold text
+			no_underline = false, -- Allow underlines
+
+			-- Style overrides for different syntax elements
+			styles = {
+				comments = { "italic" }, -- Italic comments
+				conditionals = { "italic" }, -- Italic if/else
+				loops = {}, -- Default style for loops
+				functions = {}, -- Default style for functions
+				keywords = {}, -- Default style for keywords
+				strings = {}, -- Default style for strings
+				variables = {}, -- Default style for variables
+				numbers = {}, -- Default style for numbers
+				booleans = {}, -- Default style for true/false
+				properties = {}, -- Default style for object properties
+				types = {}, -- Default style for types
+				operators = {}, -- Default style for +, -, etc.
 			},
-			lsp_styles = { -- Handles the style of specific lsp hl groups (see `:h lsp-highlight`).
+
+			-- ========================================
+			-- LSP Styles
+			-- ========================================
+			lsp_styles = {
+				-- Virtual text (inline diagnostics)
 				virtual_text = {
 					errors = { "italic" },
 					hints = { "italic" },
@@ -50,6 +78,7 @@ return {
 					information = { "italic" },
 					ok = { "italic" },
 				},
+				-- Underlines for diagnostics
 				underlines = {
 					errors = { "underline" },
 					hints = { "underline" },
@@ -57,63 +86,85 @@ return {
 					information = { "underline" },
 					ok = { "underline" },
 				},
+				-- Inlay hints styling
 				inlay_hints = {
-					background = true,
+					background = true, -- Show background for inlay hints
 				},
 			},
-			color_overrides = {},
+
+			-- ========================================
+			-- Color Overrides
+			-- ========================================
+			color_overrides = {}, -- Custom color palette (empty = use defaults)
+
+			-- ========================================
+			-- Highlight Overrides
+			-- ========================================
+			-- Customize specific highlight groups per flavor
 			highlight_overrides = {
 				all = function(colors)
 					return {
-						NvimTreeNormal = { fg = colors.none },
-						CmpBorder = { fg = "#3e4145" },
+						NvimTreeNormal = { fg = colors.none }, -- File tree text color
+						CmpBorder = { fg = "#3e4145" }, -- Completion menu border
 					}
 				end,
 				latte = function(latte)
 					return {
-						Normal = { fg = latte.base },
+						Normal = { fg = latte.base }, -- Light mode text
 					}
 				end,
 				frappe = function(frappe)
 					return {
-						["@comment"] = { fg = frappe.surface2, style = { "italic" } },
+						["@comment"] = { fg = frappe.surface2, style = { "italic" } }, -- Comments
 					}
 				end,
 				macchiato = function(macchiato)
 					return {
-						LineNr = { fg = macchiato.overlay1 },
+						LineNr = { fg = macchiato.overlay1 }, -- Line numbers
 					}
 				end,
 				mocha = function(mocha)
 					return {
-						Comment = { fg = mocha.flamingo },
+						Comment = { fg = mocha.flamingo }, -- Dark mode comments
 					}
 				end,
 			},
+
+			-- ========================================
+			-- Custom Highlights
+			-- ========================================
+			-- Apply to all flavors
 			custom_highlights = function(colors)
 				return {
-					Comment = { fg = colors.flamingo },
-					TabLineSel = { bg = colors.pink },
-					CmpBorder = { fg = colors.surface2 },
-					Pmenu = { bg = colors.none },
+					Comment = { fg = colors.flamingo }, -- Comment color
+					TabLineSel = { bg = colors.pink }, -- Selected tab background
+					CmpBorder = { fg = colors.surface2 }, -- Completion border
+					Pmenu = { bg = colors.none }, -- Popup menu background
 				}
 			end,
-			default_integrations = true,
-			auto_integrations = false,
+
+			-- ========================================
+			-- Plugin Integrations
+			-- ========================================
+			default_integrations = true, -- Enable default plugin support
+			auto_integrations = false, -- Don't auto-detect plugins
 			integrations = {
-				cmp = true,
-				gitsigns = true,
-				nvimtree = true,
-				notify = false,
+				cmp = true, -- nvim-cmp completion
+				gitsigns = true, -- Git signs in gutter
+				nvimtree = true, -- File tree
+				notify = false, -- Notification plugin
 				mini = {
-					enabled = true,
-					indentscope_color = "",
+					enabled = true, -- mini.nvim plugins
+					indentscope_color = "", -- Use default color
 				},
-				-- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+				-- More integrations available at:
+				-- https://github.com/catppuccin/nvim#integrations
 			},
 		})
 
-		-- setup must be called before loading
+		-- ========================================
+		-- Apply Colorscheme
+		-- ========================================
 		vim.cmd.colorscheme("catppuccin")
 	end,
 }

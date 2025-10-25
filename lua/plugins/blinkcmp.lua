@@ -41,29 +41,40 @@ return {
 			--
 			-- See :h blink-cmp-config-keymap for defining your own keymap
 			keymap = {
-				preset = "default",
-				["<C-Z>"] = { "accept", "fallback" },
-				["enter"] = { "accept" },
-				["<Up>"] = { "select_prev", "fallback" },
-				["<Down>"] = { "select_next", "fallback" },
-				["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
+				-- Use 'enter' preset: Enter key accepts suggestions
+				preset = "enter",
+
+				-- Accept completion
+				["<C-y>"] = { "accept", "fallback" }, -- Ctrl+y: Accept selected item (alternative)
+
+				-- Navigate through suggestions
+				["<Up>"] = { "select_prev", "fallback" }, -- Up arrow: Previous suggestion
+				["<Down>"] = { "select_next", "fallback" }, -- Down arrow: Next suggestion
+				["<C-p>"] = { "select_prev", "fallback" }, -- Ctrl+p: Previous suggestion (vim-style)
+				["<C-n>"] = { "select_next", "fallback" }, -- Ctrl+n: Next suggestion (vim-style)
+
+				-- Signature help
+				["<C-k>"] = { "show_signature", "hide_signature", "fallback" }, -- Ctrl+k: Toggle function signature
+
+				-- Tab: Accept and navigate snippets
 				["<Tab>"] = {
 					function(cmp)
 						if cmp.snippet_active() then
-							return cmp.accept()
+							return cmp.accept() -- Accept if in snippet
 						else
-							return cmp.select_and_accept()
+							return cmp.select_and_accept() -- Select and accept
 						end
 					end,
-					"snippet_forward",
+					"snippet_forward", -- Jump to next snippet placeholder
 					"fallback",
 				},
-				-- show with a list of providers
-				["<C-space>"] = {
-					function(cmp)
-						cmp.show({ providers = { "snippets" } })
-					end,
-				},
+
+				-- Shift+Tab: Jump back in snippet
+				["<S-Tab>"] = { "snippet_backward", "fallback" }, -- Shift+Tab: Previous snippet placeholder
+
+				-- Documentation and menu control
+				["<C-space>"] = { "show", "show_documentation", "hide_documentation" }, -- Ctrl+Space: Show/hide docs
+				["<C-e>"] = { "hide", "fallback" }, -- Ctrl+e: Close completion menu
 			},
 
 			appearance = {

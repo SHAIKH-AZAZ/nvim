@@ -1,50 +1,70 @@
+-- ============================================================================
+-- Neo-tree - File Explorer
+-- ============================================================================
+-- Modern file tree explorer with git integration
+-- Toggle with Ctrl+n
+-- ============================================================================
+
 return {
 	"nvim-neo-tree/neo-tree.nvim",
 	branch = "v3.x",
 	dependencies = {
-		"nvim-lua/plenary.nvim",
-		"nvim-tree/nvim-web-devicons",
-		"MunifTanjim/nui.nvim",
+		"nvim-lua/plenary.nvim", -- Required utility library
+		"nvim-tree/nvim-web-devicons", -- File icons
+		"MunifTanjim/nui.nvim", -- UI components
 	},
 	config = function()
 		require("neo-tree").setup({
+			-- ========================================
+			-- Filesystem Settings
+			-- ========================================
 			filesystem = {
 				filtered_items = {
-					hide_dotfiles = false,
-					hide_gitignored = false,
+					hide_dotfiles = false, -- Show hidden files (.gitignore, .env, etc.)
+					hide_gitignored = false, -- Show git-ignored files
 				},
-				follow_current_file = { enabled = true },
-				group_empty_dirs = true,
-				use_libuv_file_watcher = true, -- live updates when creating/editing files
+				follow_current_file = { enabled = true }, -- Auto-focus current file in tree
+				group_empty_dirs = true, -- Collapse empty nested directories
+				use_libuv_file_watcher = true, -- Live updates when creating/editing files
 			},
+
+			-- ========================================
+			-- Visual Components
+			-- ========================================
 			default_component_configs = {
+				-- Git status icons
 				git_status = {
 					symbols = {
-						-- Status type → icon mappings
-						added = "",
-						modified = "",
-						deleted = "",
-						renamed = "",
-						untracked = "",
-						ignored = "",
-						unstaged = "󰄱",
-						staged = "",
-						conflict = "",
+						added = "", -- New file
+						modified = "", -- Modified file
+						deleted = "", -- Deleted file
+						renamed = "", -- Renamed file
+						untracked = "", -- Untracked file
+						ignored = "", -- Git-ignored file
+						unstaged = "󰄱", -- Unstaged changes
+						staged = "", -- Staged changes
+						conflict = "", -- Merge conflict
 					},
 				},
+				-- Modified buffer indicator
 				modified = {
 					symbol = "●", -- Show dot for unsaved buffers (non-git too)
 					highlight = "NeoTreeModified",
 				},
 			},
+
+			-- ========================================
+			-- Event Handlers
+			-- ========================================
 			event_handlers = {
-				-- Optional: auto-refresh when saving or switching buffers
+				-- Auto-close tree when opening a file
 				{
 					event = "file_opened",
 					handler = function()
 						require("neo-tree.command").execute({ action = "close" })
 					end,
 				},
+				-- Notify when new file is added
 				{
 					event = "file_added",
 					handler = function(file_path)

@@ -1,26 +1,41 @@
-return {
-    "windwp/nvim-autopairs",
-    event = { "InsertEnter" },
-    dependencies = {
-        "hrsh7th/nvim-cmp",
-    },
-    config = function()
-        local autopairs = require("nvim-autopairs") -- import nvim-autopairs
+-- ============================================================================
+-- Auto-pairs - Automatic Bracket/Quote Pairing
+-- ============================================================================
+-- Automatically closes brackets, quotes, and parentheses as you type
+-- Integrates with nvim-cmp for smart completion
+-- ============================================================================
 
-        -- setup autopairs
-        autopairs.setup({
-            check_ts = true, -- treesitter enabled
-            ts_config = {
-                lua = { "string" }, -- dont add pairs in lua string treesitter nodes
-                -- javascript = { "template_string" }, -- dont add pairs in javscript template_string treesitter nodes
-                java = false, -- dont check treesitter on java
-            },
-        })
-        -- import nvim-autopairs completion functionality
-        local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-        -- import nvim-cmp plugin (completions plugin)
-        local cmp = require("cmp")
-        -- make autopairs and completion work together
-        cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-    end,
+return {
+	"windwp/nvim-autopairs",
+	event = { "InsertEnter" }, -- Load when entering insert mode
+	dependencies = {
+		"hrsh7th/nvim-cmp", -- Completion plugin integration
+	},
+	config = function()
+		local autopairs = require("nvim-autopairs")
+
+		-- ========================================
+		-- Setup Auto-pairs
+		-- ========================================
+		autopairs.setup({
+			check_ts = true, -- Use treesitter for smarter pairing
+			ts_config = {
+				-- Don't add pairs inside these treesitter nodes
+				lua = { "string" }, -- Don't pair inside Lua strings
+				-- javascript = { "template_string" }, -- Don't pair in JS template strings
+				java = false, -- Disable treesitter check for Java
+			},
+		})
+
+		-- ========================================
+		-- Integration with nvim-cmp
+		-- ========================================
+		-- Makes autopairs work with completion menu
+		-- Example: Selecting a function completion will add () automatically
+		local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+		local cmp = require("cmp")
+
+		-- Trigger autopairs when confirming completion
+		cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+	end,
 }
