@@ -53,3 +53,5 @@ require("lazy").setup("plugins", {
 -- ========================================
 -- Load custom autocommands (auto-save, format on save, etc.)
 require("core.autocmd")
+-- Load custom keymaps
+require("config.keymaps")

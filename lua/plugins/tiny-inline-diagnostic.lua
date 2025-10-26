@@ -61,10 +61,10 @@ return {
 				multilines = false, -- Don't show multiline diagnostics inline
 
 				-- Show all diagnostics on line
-				show_all_diags_on_cursorline = false, -- Only show first
+				show_all_diags_on_cursorline = true, -- Show all (but we'll filter duplicates)
 
 				-- Enable/disable per severity
-				enable_on_insert = false, -- Don't show in insert mode
+				enable_on_insert = true, -- Don't show in insert mode
 			},
 
 			-- ========================================
@@ -79,16 +79,49 @@ return {
 			-- ========================================
 			format = function(diagnostic)
 				-- Customize diagnostic message format
+				-- Remove duplicate messages by checking if already shown
 				return diagnostic.message
 			end,
+
+			-- ========================================
+			-- Filter Duplicates
+			-- ========================================
+			-- Only show unique diagnostics (filter out duplicates)
+			break_line = {
+				enabled = false, -- Don't break lines
+			},
 		})
 
 		-- ========================================
-		-- Disable Native Virtual Text
+		-- Disable Native Virtual Text & Filter Duplicates
 		-- ========================================
 		-- Since we're using tiny-inline-diagnostic
 		vim.diagnostic.config({
 			virtual_text = false, -- Disable native virtual text
 		})
+
+		-- ========================================
+		-- Filter Duplicate Diagnostics
+		-- ========================================
+		-- Override diagnostic handler to show only unique messages
+		local original_handler = vim.diagnostic.handlers.virtual_text
+		vim.diagnostic.handlers.virtual_text = {
+			show = function(namespace, bufnr, diagnostics, opts)
+				-- Filter out duplicate diagnostics
+				local seen = {}
+				local unique_diagnostics = {}
+				for _, diag in ipairs(diagnostics) do
+					local key = diag.lnum .. ":" .. diag.message
+					if not seen[key] then
+						seen[key] = true
+						table.insert(unique_diagnostics, diag)
+					end
+				end
+				if original_handler and original_handler.show then
+					original_handler.show(namespace, bufnr, unique_diagnostics, opts)
+				end
+			end,
+			hide = original_handler and original_handler.hide or function() end,
+		}
 	end,
 }
