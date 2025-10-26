@@ -136,18 +136,22 @@ return {
 			-- Event Handlers
 			-- ========================================
 			event_handlers = {
-				-- Auto-close tree when opening a file
+				-- Auto-close tree when opening a file (with error handling)
 				{
 					event = "file_opened",
 					handler = function()
-						require("neo-tree.command").execute({ action = "close" })
+						pcall(function()
+							require("neo-tree.command").execute({ action = "close" })
+						end)
 					end,
 				},
-				-- Notify when new file is added
+				-- Notify when new file is added (with error handling)
 				{
 					event = "file_added",
 					handler = function(file_path)
-						vim.notify("New file added: " .. file_path, vim.log.levels.INFO)
+						pcall(function()
+							vim.notify("New file added: " .. file_path, vim.log.levels.INFO)
+						end)
 					end,
 				},
 			},

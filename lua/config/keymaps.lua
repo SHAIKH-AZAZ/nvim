@@ -111,10 +111,10 @@ map("n", "[q", "<cmd>cprev<cr>", { desc = "Previous Quickfix" })
 -- ========================================
 
 -- ]d: Next diagnostic
-map("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
+-- map("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
 
 -- [d: Previous diagnostic
-map("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous Diagnostic" })
+-- map("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous Diagnostic" })
 
 -- <leader>e: Show diagnostic in floating window
 map("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show Diagnostic" })

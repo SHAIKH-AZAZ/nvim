@@ -51,6 +51,19 @@ vim.api.nvim_create_user_command("CheckCompletion", function()
 end, { desc = "Check completion status" })
 
 -- ========================================
+-- Check Autopairs Status
+-- ========================================
+vim.api.nvim_create_user_command("CheckAutopairs", function()
+	local autopairs_ok, autopairs = pcall(require, "nvim-autopairs")
+	if autopairs_ok then
+		local state = autopairs.state
+		vim.notify("✅ Autopairs loaded and active", vim.log.levels.INFO)
+	else
+		vim.notify("❌ Autopairs not loaded", vim.log.levels.ERROR)
+	end
+end, { desc = "Check autopairs status" })
+
+-- ========================================
 -- Check All Plugins
 -- ========================================
 vim.api.nvim_create_user_command("CheckPlugins", function()
@@ -84,6 +97,24 @@ vim.api.nvim_create_user_command("FixLineNumbers", function()
 end, { desc = "Force enable line numbers" })
 
 -- ========================================
+-- Fix Window Layout
+-- ========================================
+vim.api.nvim_create_user_command("FixWindows", function()
+	pcall(function()
+		-- Close all floating windows
+		for _, win in ipairs(vim.api.nvim_list_wins()) do
+			local config = vim.api.nvim_win_get_config(win)
+			if config.relative ~= "" then
+				vim.api.nvim_win_close(win, true)
+			end
+		end
+		-- Equalize window sizes
+		vim.cmd("wincmd =")
+		vim.notify("✅ Windows fixed", vim.log.levels.INFO)
+	end)
+end, { desc = "Fix window layout issues" })
+
+-- ========================================
 -- Show Config Info
 -- ========================================
 vim.api.nvim_create_user_command("ConfigInfo", function()
@@ -100,6 +131,7 @@ vim.api.nvim_create_user_command("ConfigInfo", function()
 		":CheckTreesitter - Check Treesitter",
 		":CheckPlugins - Check all plugins",
 		":FixLineNumbers - Restore line numbers",
+		":FixWindows - Fix window layout",
 		":Lazy - Plugin manager",
 		":Mason - LSP installer",
 	}

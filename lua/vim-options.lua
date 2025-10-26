@@ -64,6 +64,10 @@ vim.wo.signcolumn = "yes" -- Window-local setting
 -- ========================================
 vim.opt.splitright = true -- New vertical splits open to the right
 vim.opt.splitbelow = true -- New horizontal splits open below
+vim.opt.winminheight = 0 -- Minimum window height (0 = allow very small windows)
+vim.opt.winminwidth = 0 -- Minimum window width (0 = allow very small windows)
+vim.opt.winheight = 1 -- Minimum height for current window
+vim.opt.winwidth = 1 -- Minimum width for current window
 
 -- ========================================
 -- Clipboard Integration
@@ -117,7 +121,7 @@ vim.opt.conceallevel = 0 -- Show all characters (don't hide quotes in JSON/Markd
 -- ========================================
 -- Note: Virtual text is disabled because we use tiny-inline-diagnostic plugin
 vim.diagnostic.config({
-	virtual_text = false, -- Disabled (using tiny-inline-diagnostic instead)
+	virtual_text = true, -- Disabled (using tiny-inline-diagnostic instead)
 	signs = true, -- Show signs in gutter
 	underline = true, -- Underline errors
 	update_in_insert = false, -- Don't update while typing

@@ -20,6 +20,30 @@
 
 ---
 
+### "Not Enough Room" Error
+
+**Symptoms:**
+- Error: `E36: Not enough room`
+- Windows won't open
+- Crashes when opening neo-tree or other plugins
+
+**Fixes:**
+1. **Quick Fix:** Run `:FixWindows`
+2. **Close extra windows:** `:only` (keeps only current window)
+3. **Restart Neovim**
+
+**Why it happens:**
+- Too many splits/windows open
+- Window size constraints too strict
+- Floating windows not closing properly
+
+**Prevention:**
+- Already fixed with `winminheight = 0` and `winminwidth = 0`
+- Error handling added to autocmds
+- Neo-tree events wrapped in pcall
+
+---
+
 ### Extensions Not Working
 
 **Check Status:**

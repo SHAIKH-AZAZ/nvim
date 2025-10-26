@@ -136,24 +136,40 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 	group = augroup("force_line_numbers"),
 	callback = function(event)
-		local buftype = vim.bo[event.buf].buftype
-		local filetype = vim.bo[event.buf].filetype
-		
-		-- Skip special buffers
-		local skip_filetypes = {
-			"neo-tree",
-			"TelescopePrompt",
-			"lazy",
-			"mason",
-			"help",
-			"qf",
-			"notify",
-		}
-		
-		if buftype == "" and not vim.tbl_contains(skip_filetypes, filetype) then
-			vim.wo.number = true
-			vim.wo.relativenumber = true
-		end
+		-- Wrap in pcall to prevent errors from crashing
+		pcall(function()
+			local buftype = vim.bo[event.buf].buftype
+			local filetype = vim.bo[event.buf].filetype
+
+			-- Skip special buffers
+			local skip_filetypes = {
+				"neo-tree",
+				"TelescopePrompt",
+				"lazy",
+				"mason",
+				"help",
+				"qf",
+				"notify",
+			}
+
+			if buftype == "" and not vim.tbl_contains(skip_filetypes, filetype) then
+				vim.wo.number = true
+				vim.wo.relativenumber = true
+			end
+		end)
+	end,
+})
+
+-- ========================================
+-- Prevent "Not Enough Room" Errors
+-- ========================================
+-- Handle window resize errors gracefully
+vim.api.nvim_create_autocmd({ "VimResized" }, {
+	group = augroup("safe_resize"),
+	callback = function()
+		pcall(function()
+			vim.cmd("tabdo wincmd =")
+		end)
 	end,
 })
 
