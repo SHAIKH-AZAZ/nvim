@@ -109,10 +109,8 @@ vim.opt.conceallevel = 0 -- Show all characters (don't hide quotes in JSON/Markd
 -- ========================================
 -- Folding (Code Collapse)
 -- ========================================
--- Note: UFO plugin provides better folding, but these are fallback settings
-vim.opt.foldmethod = "expr" -- Use expression for folding (treesitter)
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- Use treesitter for folding
-vim.opt.foldenable = false -- Start with folds open (use 'true' to start collapsed)
+-- Note: These settings are overridden by UFO plugin if installed
+-- UFO will handle folding automatically
 
 -- ========================================
 -- Diagnostics Configuration

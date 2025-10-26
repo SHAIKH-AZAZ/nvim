@@ -55,3 +55,5 @@ require("lazy").setup("plugins", {
 require("core.autocmd")
 -- Load custom keymaps
 require("config.keymaps")
+-- Load health check commands
+require("config.health-check")

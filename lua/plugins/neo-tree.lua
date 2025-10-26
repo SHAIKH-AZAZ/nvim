@@ -2,7 +2,25 @@
 -- Neo-tree - File Explorer
 -- ============================================================================
 -- Modern file tree explorer with git integration
--- Toggle with Ctrl+n
+--
+-- Shows: .env, .gitignore, and other important dotfiles
+-- Hides: .git, .DS_Store, node_modules, .cache, .vscode, .idea
+--
+-- Keymaps:
+--   Ctrl+n       - Toggle neo-tree
+--   <leader>e    - Focus neo-tree
+--   <leader>E    - Reveal current file in tree
+--
+-- Inside Neo-tree:
+--   H            - Toggle ALL hidden files
+--   I            - Toggle git-ignored files
+--   a            - Add file/folder
+--   d            - Delete
+--   r            - Rename
+--   c            - Copy
+--   x            - Cut
+--   p            - Paste
+--   ?            - Show help
 -- ============================================================================
 
 return {
@@ -13,15 +31,76 @@ return {
 		"nvim-tree/nvim-web-devicons", -- File icons
 		"MunifTanjim/nui.nvim", -- UI components
 	},
+	keys = {
+		-- Ctrl+n: Toggle neo-tree
+		{ "<C-n>", "<cmd>Neotree toggle<cr>", desc = "Toggle Neo-tree" },
+		-- <leader>e: Focus neo-tree
+		{ "<leader>e", "<cmd>Neotree focus<cr>", desc = "Focus Neo-tree" },
+		-- <leader>E: Reveal current file in neo-tree
+		{ "<leader>E", "<cmd>Neotree reveal<cr>", desc = "Reveal in Neo-tree" },
+	},
 	config = function()
 		require("neo-tree").setup({
+			-- ========================================
+			-- Window Settings
+			-- ========================================
+			window = {
+				position = "left", -- left, right, top, bottom, float, current
+				width = 30, -- Width of the window
+				mappings = {
+					-- Toggle hidden files with H
+					["H"] = "toggle_hidden",
+					-- Toggle git-ignored files with I  
+					["I"] = "toggle_git_ignored",
+				},
+			},
 			-- ========================================
 			-- Filesystem Settings
 			-- ========================================
 			filesystem = {
 				filtered_items = {
-					hide_dotfiles = false, -- Show hidden files (.gitignore, .env, etc.)
+					-- Show dotfiles but hide specific unwanted ones
+					hide_dotfiles = false, -- Show .env, .gitignore, etc.
 					hide_gitignored = false, -- Show git-ignored files
+					--hide_by_name = {
+						-- Hide these specific files/folders
+					--	".git",
+					--	".DS_Store",
+					--	"thumbs.db",
+					--	"node_modules",
+					--	".cache",
+					--	".vscode",
+					--	".idea",
+					-- },
+					hide_by_pattern = {
+						-- Hide files matching these patterns
+						-- "*.meta",
+					},
+					always_show = {
+						-- Always show these important files
+						".gitignore",
+						".env",
+						".env.local",
+						".env.example",
+						".env.development",
+						".env.production",
+						".eslintrc.js",
+						".prettierrc",
+					},
+					always_show_by_pattern = {
+						-- Always show files matching these patterns
+						".env*",
+					},
+					never_show = {
+						-- Never show these files
+						".DS_Store",
+						"thumbs.db",
+					},
+					never_show_by_pattern = {
+						-- Never show files matching these patterns
+						-- "^%.git$",
+					},
+					visible = true, -- Show filtered items (dimmed)
 				},
 				follow_current_file = { enabled = true }, -- Auto-focus current file in tree
 				group_empty_dirs = true, -- Collapse empty nested directories

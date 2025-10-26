@@ -72,6 +72,9 @@ vim.api.nvim_create_autocmd("FileType", {
 	},
 	callback = function(event)
 		vim.bo[event.buf].buflisted = false
+		-- Don't hide line numbers in these buffers
+		vim.wo.number = true
+		vim.wo.relativenumber = true
 		vim.schedule(function()
 			vim.keymap.set("n", "q", function()
 				vim.cmd("close")
@@ -126,10 +129,41 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	end,
 })
 
+-- ========================================
+-- Force Line Numbers (Fix Disappearing Issue)
+-- ========================================
+-- Ensure line numbers are always shown in normal buffers
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+	group = augroup("force_line_numbers"),
+	callback = function(event)
+		local buftype = vim.bo[event.buf].buftype
+		local filetype = vim.bo[event.buf].filetype
+		
+		-- Skip special buffers
+		local skip_filetypes = {
+			"neo-tree",
+			"TelescopePrompt",
+			"lazy",
+			"mason",
+			"help",
+			"qf",
+			"notify",
+		}
+		
+		if buftype == "" and not vim.tbl_contains(skip_filetypes, filetype) then
+			vim.wo.number = true
+			vim.wo.relativenumber = true
+		end
+	end,
+})
+
+-- ========================================
+-- Custom Keymaps
+-- ========================================
 vim.keymap.set("n", "dgl", function()
 	vim.diagnostic.open_float()
 end, { desc = "Open diagnostic in floating window " })
+
 vim.keymap.set("n", "<leader>cf", function()
 	require("conform").format()
 end, { desc = "code formatter" })
---
