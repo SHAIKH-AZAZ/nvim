@@ -50,7 +50,7 @@ return {
 				mappings = {
 					-- Toggle hidden files with H
 					["H"] = "toggle_hidden",
-					-- Toggle git-ignored files with I  
+					-- Toggle git-ignored files with I
 					["I"] = "toggle_git_ignored",
 				},
 			},
@@ -59,25 +59,25 @@ return {
 			-- ========================================
 			filesystem = {
 				filtered_items = {
-					-- Show dotfiles but hide specific unwanted ones
-					hide_dotfiles = false, -- Show .env, .gitignore, etc.
-					hide_gitignored = false, -- Show git-ignored files
-					--hide_by_name = {
-						-- Hide these specific files/folders
-					--	".git",
-					--	".DS_Store",
-					--	"thumbs.db",
-					--	"node_modules",
-					--	".cache",
-					--	".vscode",
-					--	".idea",
-					-- },
-					hide_by_pattern = {
-						-- Hide files matching these patterns
-						-- "*.meta",
+					-- ========================================
+					-- IMPORTANT: Hidden files ARE shown by default
+					-- Press 'H' in neo-tree to toggle them
+					-- ========================================
+					hide_dotfiles = false, -- FALSE = Show .env, .gitignore, etc.
+					hide_gitignored = false, -- FALSE = Show git-ignored files
+					hide_hidden = false, -- FALSE = Show hidden files
+					
+					-- Only hide these specific junk files
+					hide_by_name = {
+						-- ".DS_Store",
+						-- "thumbs.db",
 					},
+					
+					-- Don't hide by pattern
+					hide_by_pattern = {},
+					
+					-- Always show important files (redundant but explicit)
 					always_show = {
-						-- Always show these important files
 						".gitignore",
 						".env",
 						".env.local",
@@ -85,22 +85,24 @@ return {
 						".env.development",
 						".env.production",
 						".eslintrc.js",
+						".eslintrc.json",
 						".prettierrc",
+						".prettierrc.json",
 					},
+					
+					-- Always show .env files
 					always_show_by_pattern = {
-						-- Always show files matching these patterns
 						".env*",
 					},
+					
+					-- Never show junk files
 					never_show = {
-						-- Never show these files
 						".DS_Store",
 						"thumbs.db",
 					},
-					never_show_by_pattern = {
-						-- Never show files matching these patterns
-						-- "^%.git$",
-					},
-					visible = true, -- Show filtered items (dimmed)
+					
+					-- Show filtered items (dimmed)
+					visible = true,
 				},
 				follow_current_file = { enabled = true }, -- Auto-focus current file in tree
 				group_empty_dirs = true, -- Collapse empty nested directories

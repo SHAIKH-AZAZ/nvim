@@ -51,18 +51,70 @@ return {
 			vim.list_extend(all_sources, completion)
 
 			-- ========================================
+			-- Helper: Check if file should be formatted
+			-- ========================================
+			local function should_format(bufnr)
+				local filename = vim.api.nvim_buf_get_name(bufnr)
+				local basename = vim.fn.fnamemodify(filename, ":t")
+
+				-- Don't format dotfiles (files starting with .)
+				if basename:match("^%.") then
+					return false
+				end
+
+				-- Don't format if file is in .gitignore
+				local gitignore_check = vim.fn.system("git check-ignore " .. vim.fn.shellescape(filename))
+				if vim.v.shell_error == 0 then
+					return false
+				end
+
+				-- Don't format these specific files
+				local excluded_files = {
+					".env",
+					".env.local",
+					".env.development",
+					".env.production",
+					".gitignore",
+					".dockerignore",
+					".npmrc",
+					".yarnrc",
+				}
+
+				for _, excluded in ipairs(excluded_files) do
+					if basename == excluded then
+						return false
+					end
+				end
+
+				return true
+			end
+
+			-- ========================================
 			-- Setup None-ls
 			-- ========================================
 			null_ls.setup({
 				sources = all_sources,
+				-- Filter formatting based on file type
+				on_attach = function(client, bufnr)
+					-- Disable formatting for dotfiles and git-ignored files
+					if not should_format(bufnr) then
+						client.server_capabilities.documentFormattingProvider = false
+						client.server_capabilities.documentRangeFormattingProvider = false
+					end
+				end,
 			})
 
 			-- ========================================
 			-- Keymaps
 			-- ========================================
-			-- <leader>gf: Format current file
+			-- <leader>gf: Format current file (respects exclusions)
 			vim.keymap.set("n", "<leader>gf", function()
-				vim.lsp.buf.format({ async = true })
+				local bufnr = vim.api.nvim_get_current_buf()
+				if should_format(bufnr) then
+					vim.lsp.buf.format({ async = true })
+				else
+					vim.notify("⚠️ Formatting disabled for this file", vim.log.levels.WARN)
+				end
 			end, { desc = "Format file with LSP" })
 		end,
 	},

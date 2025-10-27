@@ -57,3 +57,5 @@ require("core.autocmd")
 require("config.keymaps")
 -- Load health check commands
 require("config.health-check")
+-- Load neo-tree debug commands
+require("config.neo-tree-debug")
