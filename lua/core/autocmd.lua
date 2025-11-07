@@ -133,7 +133,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 -- Force Line Numbers (Fix Disappearing Issue)
 -- ========================================
 -- Ensure line numbers are always shown in normal buffers
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "WinEnter" }, {
 	group = augroup("force_line_numbers"),
 	callback = function(event)
 		-- Wrap in pcall to prevent errors from crashing
@@ -141,7 +141,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 			local buftype = vim.bo[event.buf].buftype
 			local filetype = vim.bo[event.buf].filetype
 
-			-- Skip special buffers
+			-- Skip special buffers where line numbers should be hidden
 			local skip_filetypes = {
 				"neo-tree",
 				"TelescopePrompt",
@@ -150,11 +150,15 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 				"help",
 				"qf",
 				"notify",
+				"noice",
+				"terminal",
+				"prompt",
 			}
 
+			-- Only show line numbers in normal file buffers
 			if buftype == "" and not vim.tbl_contains(skip_filetypes, filetype) then
-				vim.wo.number = true
-				vim.wo.relativenumber = true
+				vim.wo[0].number = true
+				vim.wo[0].relativenumber = true
 			end
 		end)
 	end,
@@ -174,6 +178,24 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
 })
 
 -- ========================================
+-- User Commands
+-- ========================================
+-- Command to force enable line numbers if they disappear
+vim.api.nvim_create_user_command("LineNumbersOn", function()
+	vim.wo.number = true
+	vim.wo.relativenumber = true
+	vim.notify("✓ Line numbers enabled", vim.log.levels.INFO)
+end, { desc = "Force enable line numbers" })
+
+-- Command to toggle line numbers
+vim.api.nvim_create_user_command("LineNumbersToggle", function()
+	vim.wo.number = not vim.wo.number
+	vim.wo.relativenumber = not vim.wo.relativenumber
+	local status = vim.wo.number and "enabled" or "disabled"
+	vim.notify("Line numbers " .. status, vim.log.levels.INFO)
+end, { desc = "Toggle line numbers" })
+
+-- ========================================
 -- Custom Keymaps
 -- ========================================
 vim.keymap.set("n", "dgl", function()
@@ -183,3 +205,6 @@ end, { desc = "Open diagnostic in floating window " })
 vim.keymap.set("n", "<leader>cf", function()
 	require("conform").format()
 end, { desc = "code formatter" })
+
+-- Quick keymap to toggle line numbers
+vim.keymap.set("n", "<leader>un", "<cmd>LineNumbersToggle<cr>", { desc = "Toggle Line Numbers" })

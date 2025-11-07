@@ -45,6 +45,12 @@ return {
 		config = function()
 			-- Get capabilities from blink.cmp
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
+			
+			-- Disable formatting from LSP servers (using conform.nvim instead)
+			local on_attach = function(client, bufnr)
+				client.server_capabilities.documentFormattingProvider = false
+				client.server_capabilities.documentRangeFormattingProvider = false
+			end
 
 			-- ========================================
 			-- TypeScript/JavaScript Server (ts_ls)
@@ -52,6 +58,7 @@ return {
 			-- Provides: autocomplete, type checking, refactoring for JS/TS/React
 			vim.lsp.config.ts_ls = {
 				capabilities = capabilities,
+				on_attach = on_attach,
 				-- File types this server handles
 				filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
 				settings = {
@@ -79,6 +86,7 @@ return {
 			-- Provides: class name autocomplete, color previews for Tailwind
 			vim.lsp.config.tailwindcss = {
 				capabilities = capabilities,
+				on_attach = on_attach,
 				filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact" },
 			}
 			vim.lsp.enable("tailwindcss")
@@ -89,6 +97,7 @@ return {
 			-- Provides: HTML tag autocomplete, validation
 			vim.lsp.config.html = {
 				capabilities = capabilities,
+				on_attach = on_attach,
 			}
 			vim.lsp.enable("html")
 
@@ -98,6 +107,7 @@ return {
 			-- Provides: CSS property autocomplete, validation
 			vim.lsp.config.cssls = {
 				capabilities = capabilities,
+				on_attach = on_attach,
 			}
 			vim.lsp.enable("cssls")
 
@@ -107,6 +117,7 @@ return {
 			-- Provides: Emmet abbreviations (type "div>ul>li*3" then expand)
 			vim.lsp.config.emmet_ls = {
 				capabilities = capabilities,
+				on_attach = on_attach,
 				filetypes = { "html", "css", "javascriptreact", "typescriptreact" },
 			}
 			vim.lsp.enable("emmet_ls")
@@ -117,6 +128,7 @@ return {
 			-- Provides: Lua autocomplete, Neovim API support
 			vim.lsp.config.lua_ls = {
 				capabilities = capabilities,
+				on_attach = on_attach,
 			}
 			vim.lsp.enable("lua_ls")
 
@@ -126,6 +138,7 @@ return {
 			-- Provides: Python type checking, autocomplete
 			vim.lsp.config.pyright = {
 				capabilities = capabilities,
+				on_attach = on_attach,
 			}
 			vim.lsp.enable("pyright")
 

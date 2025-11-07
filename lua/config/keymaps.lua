@@ -83,6 +83,19 @@ map("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move Lines Down" })
 map("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move Lines Up" })
 
 -- ========================================
+-- Code Formatting
+-- ========================================
+
+-- <leader>f: Format current file (using conform.nvim)
+map({ "n", "v" }, "<leader>f", function()
+	require("conform").format({
+		lsp_format = "fallback",
+		async = false,
+		timeout_ms = 500,
+	})
+end, { desc = "Format File" })
+
+-- ========================================
 -- Clear Search Highlight
 -- ========================================
 

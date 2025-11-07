@@ -15,13 +15,13 @@ return {
 			local null_ls = require("null-ls")
 
 			-- ========================================
-			-- Formatting Sources
+			-- Formatting Sources (DISABLED - using conform.nvim instead)
 			-- ========================================
 			-- Tools that format your code
 			local formatting = {
-				null_ls.builtins.formatting.stylua, -- Lua formatter
-				null_ls.builtins.formatting.prettier, -- JS/TS/CSS/HTML/JSON formatter
-				null_ls.builtins.formatting.eslint_d, -- JS/TS formatter + fixer
+				-- null_ls.builtins.formatting.stylua, -- Lua formatter
+				-- null_ls.builtins.formatting.prettier, -- JS/TS/CSS/HTML/JSON formatter
+				-- null_ls.builtins.formatting.eslint_d, -- JS/TS formatter + fixer
 			}
 
 			-- ========================================
@@ -94,28 +94,18 @@ return {
 			-- ========================================
 			null_ls.setup({
 				sources = all_sources,
-				-- Filter formatting based on file type
+				-- Disable formatting capabilities (using conform.nvim instead)
 				on_attach = function(client, bufnr)
-					-- Disable formatting for dotfiles and git-ignored files
-					if not should_format(bufnr) then
-						client.server_capabilities.documentFormattingProvider = false
-						client.server_capabilities.documentRangeFormattingProvider = false
-					end
+					-- Always disable formatting from none-ls
+					client.server_capabilities.documentFormattingProvider = false
+					client.server_capabilities.documentRangeFormattingProvider = false
 				end,
 			})
 
 			-- ========================================
-			-- Keymaps
+			-- Keymaps (DISABLED - using conform.nvim keymaps instead)
 			-- ========================================
-			-- <leader>gf: Format current file (respects exclusions)
-			vim.keymap.set("n", "<leader>gf", function()
-				local bufnr = vim.api.nvim_get_current_buf()
-				if should_format(bufnr) then
-					vim.lsp.buf.format({ async = true })
-				else
-					vim.notify("⚠️ Formatting disabled for this file", vim.log.levels.WARN)
-				end
-			end, { desc = "Format file with LSP" })
+			-- Formatting is now handled by conform.nvim with <leader>lf
 		end,
 	},
 

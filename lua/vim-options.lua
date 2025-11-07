@@ -13,10 +13,12 @@ vim.opt.softtabstop = 2 -- Backspace deletes 2 spaces
 vim.opt.shiftwidth = 2 -- Indent/outdent by 2 spaces
 
 -- ========================================
--- Line Numbers
+-- Line Numbers (Force Enable)
 -- ========================================
 vim.opt.number = true -- Show line numbers
 vim.opt.relativenumber = true -- Show relative line numbers (easier for jumping with 5j, 10k, etc.)
+vim.wo.number = true -- Window-local setting
+vim.wo.relativenumber = true -- Window-local setting
 
 -- ========================================
 -- Colors and UI
