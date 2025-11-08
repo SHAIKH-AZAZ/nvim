@@ -29,21 +29,13 @@ return {
 					"tsx", -- TypeScript JSX
 					"html",
 					"css",
-					"graphql",
 					"svelte",
-					"http", -- HTTP requests
 
 					-- Backend
-					"go",
 					"python",
-					"java",
-					"rust",
-					"ron", -- Rust Object Notation
-					"c",
 
 					-- Config/Data
 					"yaml",
-					"prisma", -- Prisma ORM
 					"dockerfile",
 					"gitignore",
 
@@ -129,13 +121,13 @@ return {
 		"windwp/nvim-ts-autotag",
 		enabled = true,
 		-- Only load for these file types
-		ft = { "html", "xml", "javascript", "typescript", "javascriptreact", "typescriptreact", "svelte" },
+		ft = { "html", "xml", "javascript", "typescript", "javascriptreact", "typescriptreact", "svelte", "python" },
 		config = function()
 			require("nvim-ts-autotag").setup({
 				opts = {
 					enable_close = true, -- Auto-close tags: <div> → <div></div>
 					enable_rename = true, -- Auto-rename pairs: <div> → <section> updates both tags
-					enable_close_on_slash = false, -- Don't auto-close on </
+					enable_close_on_slash = true, -- Don't auto-close on </
 				},
 				-- Per-filetype configuration
 				per_filetype = {

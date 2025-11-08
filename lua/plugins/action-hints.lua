@@ -9,11 +9,8 @@ return {
         },
         use_virtual_text = true,
       })
-      require("lualine").setup({
-        sections = {
-          lualine_x = { require("action-hints").statusline },
-        },
-      })
+      -- Don't override lualine config - it's already configured in lualine.lua
+      -- If you want action-hints in lualine, add it to lua/plugins/lualine.lua instead
     end,
   },
 }

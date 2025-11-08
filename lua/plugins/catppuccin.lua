@@ -9,10 +9,7 @@ return {
 	"catppuccin/nvim",
 	name = "catppuccin",
 	priority = 1000, -- Load before other plugins (colorscheme needs to be first)
-	opts = {
-		transparent_background = false,
-	},
-	config = function(_, opts)
+	config = function()
 		require("catppuccin").setup({
 			-- ========================================
 			-- Flavor Selection
@@ -26,7 +23,7 @@ return {
 			-- ========================================
 			-- Transparency
 			-- ========================================
-			transparent_background = true, -- Make background transparent
+			transparent_background = false, -- Make background transparent (set to true if you want transparency)
 			float = {
 				transparent = false, -- Floating windows have solid background
 				solid = false, -- Use border styling
@@ -36,7 +33,7 @@ return {
 			-- Visual Settings
 			-- ========================================
 			show_end_of_buffer = false, -- Hide '~' after file end
-			term_colors = false, -- Don't set terminal colors
+			term_colors = true, -- Set terminal colors to match theme
 			dim_inactive = {
 				enabled = false, -- Don't dim inactive windows
 				shade = "dark",

@@ -6,7 +6,7 @@ return {
 
     auto_session.setup({
       auto_restore_enabled = false,
-      auto_session_suppress_dirs == {"~/." , "~/.Dev" , "~/Downloads" , "~/Documents" , "~/Desktop/"},
+      auto_session_suppress_dirs = {"~/." , "~/.Dev" , "~/Downloads" , "~/Documents" , "~/Desktop/"},
     })
 
   vim.keymap.set("n" , "<leader>wr" , "<cmd>SessionRestore<CR>" , { desc = "Restore session for cwd"})

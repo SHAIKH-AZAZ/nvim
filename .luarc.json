@@ -6,5 +6,8 @@
         "session",
         "auto_session_suppress_dirs",
         "ts_configs"
+    ],
+    "diagnostics.disable": [
+        "missing-fields"
     ]
 }

@@ -14,9 +14,9 @@ return {
 		-- ========================================
 		options = {
 			theme = "auto", -- automatically match your colorscheme (better than hardcoding)
-      section_separators = { left = "", right = "" },
-      component_separators = { left = "", right = "" },
-      globalstatus = true, -- use a single statusline across all windows (Neovim 0.9+)
+			section_separators = { left = "", right = "" },
+			component_separators = { left = "", right = "" },
+			globalstatus = true, -- use a single statusline across all windows (Neovim 0.9+)
 		},
 
 		-- ========================================

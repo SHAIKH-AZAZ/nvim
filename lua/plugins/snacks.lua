@@ -376,14 +376,7 @@ return {
 			end,
 			desc = "Goto Declaration",
 		},
-		{
-			"gr",
-			function()
-				Snacks.picker.lsp_references()
-			end,
-			nowait = true,
-			desc = "References",
-		},
+		-- gr removed - using native LSP references from lsp-config.lua
 		{
 			"gI",
 			function()
