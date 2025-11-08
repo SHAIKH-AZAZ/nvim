@@ -126,7 +126,7 @@ vim.diagnostic.config({
 	virtual_text = true, -- Disabled (using tiny-inline-diagnostic instead)
 	signs = true, -- Show signs in gutter
 	underline = true, -- Underline errors
-	update_in_insert = false, -- Don't update while typing
+	update_in_insert = true, -- Update diagnostics while typing in insert mode
 	severity_sort = true, -- Sort by severity (errors first)
 	float = {
 		border = "rounded", -- Rounded border for floating windows
@@ -135,3 +135,9 @@ vim.diagnostic.config({
 		prefix = "", -- No prefix
 	},
 })
+
+-- ========================================
+-- Inlay Hints Configuration
+-- ========================================
+-- Enable inlay hints globally (shows parameter names, type hints, etc.)
+vim.lsp.inlay_hint.enable(true)

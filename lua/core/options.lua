@@ -50,6 +50,9 @@ vim.opt.sidescrolloff = 8
 -- Command line height
 vim.opt.cmdheight = 1
 
+-- Statusline settings for tmux compatibility
+vim.opt.laststatus = 3 -- Global statusline (works better with tmux)
+
 -- Better completion experience
 vim.opt.completeopt = "menu,menuone,noselect"
 
