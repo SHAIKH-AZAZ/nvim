@@ -116,32 +116,9 @@ return {
           filetypes = { "markdown" },
         }),
 
-        -- eslint_d only if project has eslint config
-        -- we'll wrap it in a generator to conditionally enable
+        -- eslint_d disabled (not installed)
+        -- Install via :Mason if you need JS/TS linting
       }
-
-      -- add eslint_d conditionally
-      local function add_eslint_if_present()
-        local ft = vim.bo.filetype
-        local fname = vim.api.nvim_buf_get_name(0)
-        local root = find_project_root(fname)
-        if root then
-          local eslint_cfgs = { root .. "/.eslintrc", root .. "/.eslintrc.js", root .. "/package.json" }
-          for _, cfg in ipairs(eslint_cfgs) do
-            if path_exists(cfg) then
-              table.insert(diagnostics, null_ls.builtins.diagnostics.eslint_d.with({
-                condition = function(utils)
-                  -- only run in JS/TS related filetypes
-                  return utils.root_has_file({ ".eslintrc", ".eslintrc.js", "package.json" })
-                end,
-                filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-              }))
-              break
-            end
-          end
-        end
-      end
-      add_eslint_if_present()
 
       local completion = {
         null_ls.builtins.completion.spell,
