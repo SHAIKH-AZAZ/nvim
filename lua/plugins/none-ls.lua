@@ -29,10 +29,10 @@ return {
 			-- ========================================
 			-- Tools that check your code for errors
 			local diagnostics = {
-				null_ls.builtins.diagnostics.eslint_d, -- JS/TS linting
+				-- null_ls.builtins.diagnostics.eslint_d, -- JS/TS linting (disabled - not installed)
 				null_ls.builtins.diagnostics.stylelint, -- CSS/SCSS/Tailwind linting
 				null_ls.builtins.diagnostics.markdownlint, -- Markdown linting
-				null_ls.builtins.diagnostics.jsonlint, -- JSON validation
+				-- null_ls.builtins.diagnostics.jsonlint, -- JSON validation (disabled - not installed)
 			}
 
 			-- ========================================
