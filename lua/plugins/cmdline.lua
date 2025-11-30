@@ -5,29 +5,42 @@ return {
 			"MunifTanjim/nui.nvim",
 		},
 		config = function()
-			-- Setup fine-cmdline
-			require("fine-cmdline").setup({
+			local fine = require("fine-cmdline")
+
+			fine.setup({
 				cmdline = {
-					prompt = ": ",
+					-- Nerd-font icon for prompt
+					prompt = "  ", -- Terminal icon
 					smart_completion = true,
 				},
 				popup = {
-					position = {
-						row = "20%", -- or absolute number
-						col = "50%",
-					},
 					border = {
 						style = "rounded",
+						text = {
+							top = "   Command  ", -- Icon + title
+							top_align = "center",
+						},
+					},
+					position = {
+						row = "30%", -- slight downward shift
+						col = "50%", -- centered horizontally
 					},
 					size = {
-						width = "60%",
+						width = "55%",
 						height = "20%",
+					},
+					win_options = {
+						winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
 					},
 				},
 			})
 
-			-- Keymap to open fine-cmdline instead of :
+			-- Remap ":" to open FineCmdline
 			vim.keymap.set("n", ":", "<cmd>FineCmdline<CR>", { noremap = true })
+
+			-- Optional: search with icons
+			vim.keymap.set("n", "/", "<cmd>FineCmdline /<CR>", {})
+			vim.keymap.set("n", "?", "<cmd>FineCmdline ?<CR>", {})
 		end,
 	},
 }
