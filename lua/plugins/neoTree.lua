@@ -29,8 +29,6 @@ return {
 				mappings = {
 					-- Toggle hidden files with H
 					["H"] = "toggle_hidden",
-					-- Toggle git-ignored files with I
-					-- ["I"] = "toggle_gitignore_filter",
 				},
 			},
 
@@ -39,19 +37,12 @@ return {
 			-- ========================================
 			filesystem = {
 				filtered_items = {
-					-- ========================================
-					-- IMPORTANT: Hidden files ARE shown by default
-					-- Press 'H' in neo-tree to toggle them
-					-- ========================================
 					hide_dotfiles = false, -- FALSE = Show .env, .gitignore, etc.
 					hide_gitignored = false, -- FALSE = Show git-ignored files
 					hide_hidden = false, -- FALSE = Show hidden files
 					
 					-- Only hide these specific junk files
-					hide_by_name = {
-						-- ".DS_Store",
-						-- "thumbs.db",
-					},
+					hide_by_name = {},
 					
 					-- Don't hide by pattern
 					hide_by_pattern = {},
@@ -93,23 +84,23 @@ return {
 			-- Visual Components
 			-- ========================================
 			default_component_configs = {
-				-- Git status icons
+				-- Git status icons (plain ASCII - works in all fonts)
 				git_status = {
 					symbols = {
-						added = "", -- New file
-						modified = "", -- Modified file
-						deleted = "", -- Deleted file
-						renamed = "", -- Renamed file
-						untracked = "", -- Untracked file
-						ignored = "", -- Git-ignored file
-						unstaged = "󰄱", -- Unstaged changes
-						staged = "", -- Staged changes
-						conflict = "", -- Merge conflict
+						added = "A",
+						modified = "M",
+						deleted = "D",
+						renamed = "R",
+						untracked = "U",
+						ignored = "I",
+						unstaged = "~",
+						staged = "S",
+						conflict = "!",
 					},
 				},
 				-- Modified buffer indicator
 				modified = {
-					symbol = "●", -- Show dot for unsaved buffers (non-git too)
+					symbol = "[+]",
 					highlight = "NeoTreeModified",
 				},
 			},
