@@ -1,10 +1,8 @@
-return {
-  "numToStr/Comment.nvim",
-  event = "VeryLazy",
-  config = function()
-    require("Comment").setup({
-      pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
-    })
-  end,
-}
+-- ============================================================================
+-- Comment.nvim - DISABLED
+-- ============================================================================
+-- NOTE: Disabled — mini.comment (in mini.lua) handles commenting
+-- with context-aware commentstring support via ts_context_commentstring.
+-- ============================================================================
 
+return {}

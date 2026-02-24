@@ -5,10 +5,10 @@ return {
 	lazy = false,
 	---@type snacks.Config
 	opts = {
+		-- NOTE: explorer disabled — using Neo-tree instead (neoTree.lua)
 		explorer = { enabled = false },
 		bigfile = { enabled = true },
 		dashboard = { enabled = true },
-		explorer = { enabled = true },
 		indent = { enabled = true },
 		input = { enabled = true },
 		notifier = {
@@ -24,26 +24,6 @@ return {
 		styles = {
 			notification = {
 				wo = { wrap = true } -- Wrap notifications
-			},
-		},
-		explorer = {
-			enabled = false,
-			git = { enabled = true }, -- show git status symbols
-			watch = { enabled = true }, -- auto-refresh on file changes
-			icons = {
-				folder_closed = "",
-				folder_open = "",
-				file = "",
-				git = {
-					unstaged = "󰄱",
-					staged = "",
-					untracked = "",
-					deleted = "",
-					renamed = "",
-					modified = "",
-					ignored = "",
-					conflict = "",
-				},
 			},
 		},
 	},
@@ -77,20 +57,8 @@ return {
 			end,
 			desc = "Command History",
 		},
-		{
-			"<leader>n",
-			function()
-				Snacks.picker.notifications()
-			end,
-			desc = "Notification History",
-		},
-		{
-			"<C-n>",
-			function()
-				Snacks.explorer()
-			end,
-			desc = "File Explorer",
-		},
+		-- NOTE: <leader>n picker.notifications removed — using notifier.show_history below
+		-- NOTE: <C-n> explorer removed — Neo-tree handles this (neoTree.lua)
 		-- find
 		{
 			"<leader>fb",
@@ -236,13 +204,7 @@ return {
 			end,
 			desc = "Autocmds",
 		},
-		{
-			"<leader>sb",
-			function()
-				Snacks.picker.lines()
-			end,
-			desc = "Buffer Lines",
-		},
+		-- NOTE: duplicate <leader>sb removed (already defined above in Grep section)
 		{
 			"<leader>sc",
 			function()

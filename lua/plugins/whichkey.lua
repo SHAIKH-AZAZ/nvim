@@ -227,14 +227,7 @@ return {
 			desc = "Window Hydra Mode (which-key)",
 		},
 
-		-- s: Show all 's' keymaps
-		{
-			"s",
-			function()
-				require("which-key").show({ global = false })
-			end,
-			desc = " S key-maps",
-		},
+		-- NOTE: "s" keymap removed — Flash.nvim uses it for jump navigation
 	},
 
 	config = function(_, opts)

@@ -1,3 +1,10 @@
+-- ============================================================================
+-- nvim-lint - External Linting
+-- ============================================================================
+-- NOTE: JS/TS linting now handled by ESLint LSP (see lsp.lua)
+-- This file handles linting for filetypes NOT covered by an LSP linter
+-- ============================================================================
+
 return {
   "mfussenegger/nvim-lint",
   event = { "BufReadPre", "BufNewFile" },
@@ -6,10 +13,8 @@ return {
     local lint = require("lint")
 
     lint.linters_by_ft = {
-      javascript = { "eslint_d" },
-      typescript = { "eslint_d" },
-      javascriptreact = { "eslint_d" },
-      typescriptreact = { "eslint_d" },
+      -- NOTE: javascript/typescript eslint removed — ESLint LSP handles it
+      -- (lsp.lua now properly starts ESLint LSP when config exists)
       css = { "stylelint" },
       scss = { "stylelint" },
       python = { "pylint" },

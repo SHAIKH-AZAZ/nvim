@@ -29,7 +29,7 @@ return {
       require("nvim-treesitter.configs").setup({
         ensure_installed = {
           -- Frontend / Web
-          "html", "css", "javascript", "typescript", "tsx", "svelte", "json",
+          "html", "css", "javascript", "typescript", "tsx", "svelte", "vue", "json", "jsdoc",
 
           -- Backend
           "python",
@@ -151,19 +151,31 @@ return {
       })
     end,
   },
-  require("ts_context_commentstring").setup({
-    enable_autocmd = false,
-    languages = {
-      typescript = "// %s",
-      javascript = "// %s",
-      lua = "-- %s",
-      html = "<!-- %s -->",
-      svelte = "<!-- %s -->",
-      vue = "<!-- %s -->",
-      css = "/* %s */",
-      json = "// %s",
-    },
-  }),
+  -- =========================================================
+  -- Context-aware Comment Strings (JSX, HTML, Svelte, Vue)
+  -- =========================================================
+  {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    lazy = true,
+    config = function()
+      require("ts_context_commentstring").setup({
+        enable_autocmd = false,
+        languages = {
+          typescript = "// %s",
+          typescriptreact = "{/* %s */}",
+          javascript = "// %s",
+          javascriptreact = "{/* %s */}",
+          lua = "-- %s",
+          html = "<!-- %s -->",
+          svelte = "<!-- %s -->",
+          vue = "<!-- %s -->",
+          css = "/* %s */",
+          scss = "/* %s */",
+          json = "// %s",
+        },
+      })
+    end,
+  },
   -- =========================================================
   -- Treesitter Context (Sticky Header for Current Function)
   -- =========================================================

@@ -210,9 +210,7 @@ vim.keymap.set("n", "dgl", function()
 	vim.diagnostic.open_float()
 end, { desc = "Open diagnostic in floating window " })
 
-vim.keymap.set("n", "<leader>cf", function()
-	require("conform").format()
-end, { desc = "code formatter" })
+-- NOTE: <leader>cf removed — use <leader>f from keymaps.lua instead
 
 -- Quick keymap to toggle line numbers
 -- vim.keymap.set("n", "<leader>un", "<cmd>LineNumbersToggle<cr>", { desc = "Toggle Line Numbers" })

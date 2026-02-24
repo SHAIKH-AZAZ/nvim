@@ -12,9 +12,7 @@ local map = vim.keymap.set
 -- ========================================
 -- Buffer Management
 -- ========================================
-
--- <leader>bd: Close current buffer (buffer delete)
-map("n", "<leader>bd", "<cmd>bd<cr>", { desc = "Close Buffer" })
+-- NOTE: <leader>bd is handled by Snacks.bufdelete() in snacks.lua
 
 -- <leader>bD: Force close buffer (discard changes)
 map("n", "<leader>bD", "<cmd>bd!<cr>", { desc = "Force Close Buffer" })
@@ -45,12 +43,9 @@ map("n", "<leader>wv", "<cmd>vsplit<cr>", { desc = "Split Vertical" })
 -- ========================================
 -- Quick Save and Quit
 -- ========================================
-
--- <leader>w: Save file
-map("n", "<leader>w", "<cmd>w<cr>", { desc = "Save File" })
-
--- <leader>q: Quit window
-map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit Window" })
+-- NOTE: <leader>w is reserved for which-key "windows" group
+-- NOTE: <leader>q is reserved for which-key "quit/session" group
+-- Use <C-s> for saving and <leader>Q for quit all
 
 -- <leader>Q: Quit all
 map("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
@@ -139,5 +134,6 @@ map("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
 -- [d: Previous diagnostic
 map("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous Diagnostic" })
 
--- <leader>e: Show diagnostic in floating window
-map("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show Diagnostic" })
+-- <leader>de: Show diagnostic in floating window
+-- NOTE: <leader>e is reserved for Neo-tree focus
+map("n", "<leader>de", vim.diagnostic.open_float, { desc = "Show Diagnostic" })

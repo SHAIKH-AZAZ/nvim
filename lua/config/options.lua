@@ -122,18 +122,41 @@ vim.opt.conceallevel = 0 -- Show all characters (don't hide quotes in JSON/Markd
 -- ========================================
 -- Diagnostics Configuration
 -- ========================================
--- Note: Virtual text is disabled because we use tiny-inline-diagnostic plugin
+-- Virtual text is truncated to prevent wrapping across the screen
+-- Use <leader>de or hover (K) to see full error messages
 vim.diagnostic.config({
-	virtual_text = true, -- Disabled (using tiny-inline-diagnostic instead)
-	signs = true, -- Show signs in gutter
+	virtual_text = {
+		-- Only show errors and warnings inline (skip hints/info)
+		severity = { min = vim.diagnostic.severity.WARN },
+		-- Truncate long messages
+		format = function(diagnostic)
+			local max_width = 60
+			local message = diagnostic.message
+			if #message > max_width then
+				message = message:sub(1, max_width) .. "…"
+			end
+			return message
+		end,
+		prefix = "●", -- Clean dot prefix
+		spacing = 4, -- Spacing between code and diagnostic
+	},
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = " ",
+			[vim.diagnostic.severity.WARN] = " ",
+			[vim.diagnostic.severity.HINT] = "󰌵 ",
+			[vim.diagnostic.severity.INFO] = " ",
+		},
+	},
 	underline = true, -- Underline errors
-	update_in_insert = true, -- Update diagnostics while typing in insert mode
+	update_in_insert = false, -- Don't update while typing (less distracting)
 	severity_sort = true, -- Sort by severity (errors first)
 	float = {
 		border = "rounded", -- Rounded border for floating windows
-		source = "always", -- Always show source
+		source = true, -- Show which LSP/linter produced the error
 		header = "", -- No header
 		prefix = "", -- No prefix
+		max_width = 80, -- Limit float width
 	},
 })
 

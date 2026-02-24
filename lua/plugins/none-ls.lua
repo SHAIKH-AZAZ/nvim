@@ -116,8 +116,8 @@ return {
           filetypes = { "markdown" },
         }),
 
-        -- eslint_d disabled (not installed)
-        -- Install via :Mason if you need JS/TS linting
+        -- NOTE: ESLint handled by ESLint LSP (see lsp.lua)
+        -- It auto-detects project config and only runs where needed
       }
 
       local completion = {

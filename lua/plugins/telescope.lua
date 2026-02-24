@@ -59,21 +59,10 @@ return {
     local keymap = vim.keymap.set
     local opts = { noremap = true, silent = true }
 
-    -- Find files
-    keymap("n", "<leader>ff", builtin.find_files, { desc = "Find files", unpack(opts) })
-    -- Live grep
-    keymap("n", "<leader>fg", builtin.live_grep, { desc = "Search text (live grep)", unpack(opts) })
-    -- Buffers
-    keymap("n", "<leader>fb", builtin.buffers, { desc = "List open buffers", unpack(opts) })
-    -- Help tags
-    keymap("n", "<leader>fh", builtin.help_tags, { desc = "Search help tags", unpack(opts) })
-    -- Recent files
-    keymap("n", "<leader>fr", builtin.oldfiles, { desc = "Find recent files", unpack(opts) })
-    -- Grep word under cursor
-    keymap("n", "<leader>fw", function()
-      builtin.grep_string({ search = vim.fn.expand("<cWORD>") })
-    end, { desc = "Search word under cursor", unpack(opts) })
-    -- Theme switcher
+    -- NOTE: Most Telescope keymaps removed — Snacks.picker handles:
+    --   <leader>ff (find files), <leader>fg (live grep), <leader>fb (buffers),
+    --   <leader>fh (help), <leader>fr (recent), <leader>fw (grep word)
+    -- Only theme switcher remains (Snacks doesn't have one)
     keymap("n", "<leader>ths", "<cmd>Telescope themes<CR>", { desc = "Open Theme Switcher", unpack(opts) })
 
     -- ================================================================
