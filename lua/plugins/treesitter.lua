@@ -26,7 +26,7 @@ return {
       -- ========================================
       vim.g.skip_ts_context_commentstring_module = true
       
-      require("nvim-treesitter.configs").setup({
+      require("nvim-treesitter").setup({
         ensure_installed = {
           -- Frontend / Web
           "html", "css", "javascript", "typescript", "tsx", "svelte", "vue", "json", "jsdoc",
