@@ -9,7 +9,7 @@ return {
 		},
 
 		config = function()
-			local ts_configs = require("nvim-treesitter.configs")
+			local ts_configs = require("nvim-treesitter")
 
 			ts_configs.setup({
 				ensure_installed = {
