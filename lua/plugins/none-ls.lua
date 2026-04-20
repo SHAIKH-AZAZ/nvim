@@ -136,15 +136,14 @@ return {
         -- root_dir = function(fname) return find_project_root(fname) or vim.loop.cwd() end,
 
         on_attach = function(client, bufnr)
-          -- If Conform handles formatting, explicitly disable formatting capability for LSP clients here
-          if client.supports_method and client.supports_method("textDocument/formatting") then
-            client.server_capabilities.documentFormattingProvider = false
-          end
-          if client.supports_method and client.supports_method("textDocument/rangeFormatting") then
-            client.server_capabilities.documentRangeFormattingProvider = false
-          end
-        end,
-      })
+  if client.supports_method and client:supports_method("textDocument/formatting") then
+    client.server_capabilities.documentFormattingProvider = false
+  end
+
+  if client.supports_method and client:supports_method("textDocument/rangeFormatting") then
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end
+end      })
 
       -- === Format-on-save integration with Conform (or fallback) ===
       -- This autocmd only formats when should_format returns true

@@ -1,196 +1,161 @@
--- ============================================================================
--- Treesitter - Advanced Syntax & Code Parsing
--- ============================================================================
--- Provides syntax highlighting, smart indentation, incremental selection,
--- rainbow parentheses, autotags, and better text objects.
--- ============================================================================
+-- Treesitter / syntax plugins
+-- Based on: https://github.com/rafi/vim-config
+
+local has_git = vim.fn.executable("git") == 1
 
 return {
-  -- =========================================================
-  -- Core Treesitter Setup
-  -- =========================================================
+  ---------------------------------------------------------------------------
+  -- Extra Vim syntax / indent plugins
+  { "iloginow/vim-stylus", ft = "stylus" },
+  { "mustache/vim-mustache-handlebars", ft = { "mustache", "handlebars" } },
+  { "lifepillar/pgsql.vim", ft = "pgsql" },
+  { "MTDL9/vim-log-highlighting", ft = "log" },
+  { "reasonml-editor/vim-reason-plus", ft = { "reason", "merlin" } },
+
+  ---------------------------------------------------------------------------
+  -- which-key label for treesitter decrement selection
+  {
+    "folke/which-key.nvim",
+    opts = {
+      spec = {
+        { "V", desc = "Decrement Selection", mode = "x" },
+      },
+    },
+  },
+
+  ---------------------------------------------------------------------------
+  -- Auto close / rename HTML and JSX tags
+  {
+    "windwp/nvim-ts-autotag",
+    event = "InsertEnter",
+    opts = {},
+  },
+
+  ---------------------------------------------------------------------------
+  -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = {
-      "HiPhish/rainbow-delimiters.nvim", -- Modern rainbow brackets
-      "nvim-treesitter/nvim-treesitter-textobjects", -- Smart motions and selections
-      "windwp/nvim-ts-autotag", -- Auto-close HTML/JSX tags
-      "JoosepAlviste/nvim-ts-context-commentstring", -- Context-aware commenting
+    keys = {
+      { "<bs>", false, mode = "x" },
+      { "V", desc = "Decrement Selection", mode = "x" },
     },
-
-    config = function()
-      -- ========================================
-      -- Basic Setup
-      -- ========================================
-      vim.g.skip_ts_context_commentstring_module = true
-      
-      require("nvim-treesitter").setup({
-        ensure_installed = {
-          -- Frontend / Web
-          "html", "css", "javascript", "typescript", "tsx", "svelte", "vue", "json", "jsdoc",
-
-          -- Backend
-          "python",
-
-          -- Config / Infra
-          "yaml", "dockerfile", "gitignore",
-
-          -- Docs
-          "markdown", "markdown_inline",
-
-          -- Neovim / Lua
-          "lua", "vim", "vimdoc", "query",
-
-          -- Shell / CLI
-          "bash",
+    dependencies = {
+      {
+        "andymass/vim-matchup",
+        opts = {
+          matchparen = {
+            offscreen = {},
+          },
         },
-        sync_install = false,
-        auto_install = true,
+      },
+    },
+    opts = {
+      sync_install = has_git,
 
-        -- ========================================
-        -- Highlighting
-        -- ========================================
-        highlight = {
-          enable = true,
-          disable = function(lang, buf)
-            local max_filesize = 200 * 1024 -- 200 KB limit
-            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-            if ok and stats and stats.size > max_filesize then
-              return true -- Disable Treesitter for huge files
-            end
-          end,
-          additional_vim_regex_highlighting = false,
+      highlight = {
+        enable = true,
+        disable = function(_, buf)
+          local max_filesize = 1024 * 1024 -- 1 MB
+          local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
+          return ok and stats and stats.size > max_filesize
+        end,
+      },
+
+      refactor = {
+        highlight_definitions = { enable = true },
+        highlight_current_scope = { enable = true },
+      },
+
+      matchup = {
+        enable = true,
+        include_match_words = true,
+      },
+
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<C-space>",
+          node_incremental = "<C-space>",
+          scope_incremental = false,
+          node_decremental = "V",
         },
+      },
 
-        -- ========================================
-        -- Indentation
-        -- ========================================
-        indent = {
+      textobjects = {
+        select = {
           enable = true,
-          disable = { "yaml", "python" }, -- keep control for tricky formats
-        },
-
-        -- ========================================
-        -- Incremental Selection
-        -- ========================================
-        incremental_selection = {
-          enable = true,
+          lookahead = true,
           keymaps = {
-            init_selection = "<C-space>",
-            node_incremental = "<C-space>",
-            node_decremental = "<bs>",
+            ["af"] = "@function.outer",
+            ["if"] = "@function.inner",
+            ["ac"] = "@class.outer",
+            ["ic"] = "@class.inner",
+            ["a,"] = "@parameter.outer",
+            ["i,"] = "@parameter.inner",
           },
         },
 
-        -- ========================================
-        -- Text Objects (functions, classes, etc.)
-        -- ========================================
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
-              ["ac"] = "@class.outer",
-              ["ic"] = "@class.inner",
-              ["ab"] = "@block.outer",
-              ["ib"] = "@block.inner",
-            },
+        move = {
+          enable = true,
+          set_jumps = true,
+          goto_next_start = {
+            ["]f"] = "@function.outer",
+            ["]c"] = "@class.outer",
+            ["],"] = "@parameter.inner",
           },
-          move = {
-            enable = true,
-            set_jumps = true,
-            goto_next_start = { ["]m"] = "@function.outer", ["]]"] = "@class.outer" },
-            goto_previous_start = { ["[m"] = "@function.outer", ["[["] = "@class.outer" },
+          goto_next_end = {
+            ["]F"] = "@function.outer",
+            ["]C"] = "@class.outer",
+          },
+          goto_previous_start = {
+            ["[f"] = "@function.outer",
+            ["[c"] = "@class.outer",
+            ["[,"] = "@parameter.inner",
+          },
+          goto_previous_end = {
+            ["[F"] = "@function.outer",
+            ["[C"] = "@class.outer",
           },
         },
-      })        
 
-      -- ========================================
-      -- Rainbow Delimiters
-      -- ========================================
-      local rainbow_delimiters = require("rainbow-delimiters")
-      vim.g.rainbow_delimiters = {
-        strategy = {
-          [""] = rainbow_delimiters.strategy["global"],
-          vim = rainbow_delimiters.strategy["local"],
+        swap = {
+          enable = true,
+          swap_next = {
+            [">,"] = "@parameter.inner",
+          },
+          swap_previous = {
+            ["<,"] = "@parameter.inner",
+          },
         },
-        query = {
-          [""] = "rainbow-delimiters",
-          lua = "rainbow-blocks",
-        },
-        highlight = {
-          "RainbowDelimiterRed",
-          "RainbowDelimiterYellow",
-          "RainbowDelimiterBlue",
-          "RainbowDelimiterOrange",
-          "RainbowDelimiterGreen",
-          "RainbowDelimiterViolet",
-          "RainbowDelimiterCyan",
-        },
-      }
+      },
 
-      -- ========================================
-      -- Autotag (HTML / JSX / Svelte)
-      -- ========================================
-      require("nvim-ts-autotag").setup({
-        enable = true,
-        filetypes = {
-          "html",
-          "xml",
-          "javascript",
-          "typescript",
-          "javascriptreact",
-          "typescriptreact",
-          "svelte",
-          "vue",
-        },
-      })
-    end,
-  },
-  -- =========================================================
-  -- Context-aware Comment Strings (JSX, HTML, Svelte, Vue)
-  -- =========================================================
-  {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    lazy = true,
-    config = function()
-      require("ts_context_commentstring").setup({
-        enable_autocmd = false,
-        languages = {
-          typescript = "// %s",
-          typescriptreact = "{/* %s */}",
-          javascript = "// %s",
-          javascriptreact = "{/* %s */}",
-          lua = "-- %s",
-          html = "<!-- %s -->",
-          svelte = "<!-- %s -->",
-          vue = "<!-- %s -->",
-          css = "/* %s */",
-          scss = "/* %s */",
-          json = "// %s",
-        },
-      })
-    end,
-  },
-  -- =========================================================
-  -- Treesitter Context (Sticky Header for Current Function)
-  -- =========================================================
-  {
-    "nvim-treesitter/nvim-treesitter-context",
-    event = "BufReadPost",
-    config = function()
-      require("treesitter-context").setup({
-        enable = true,
-        max_lines = 4, -- limit context height
-        trim_scope = "inner",
-        mode = "cursor", -- show context for cursor scope
-        line_numbers = true,
-      })
-    end,
+      ensure_installed = {
+        "comment",
+        "css",
+        "csv",
+        "cue",
+        "dtd",
+        "editorconfig",
+        "fish",
+        "git_config",
+        "git_rebase",
+        "gitattributes",
+        "gitcommit",
+        "gitignore",
+        "graphql",
+        "http",
+        "json5",
+        "just",
+        "make",
+        "readline",
+        "scss",
+        "sql",
+        "ssh_config",
+        "svelte",
+        "vhs",
+        "zig",
+        "zsh",
+      },
+    },
   },
 }
-
