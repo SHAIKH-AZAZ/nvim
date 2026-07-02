@@ -145,29 +145,6 @@ return {
   end
 end      })
 
-      -- === Format-on-save integration with Conform (or fallback) ===
-      -- This autocmd only formats when should_format returns true
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        group = vim.api.nvim_create_augroup("NullLsConformFormat", { clear = true }),
-        pattern = { "*" },
-        callback = function(args)
-          local bufnr = args.buf
-          if not should_format(bufnr) then
-            return
-          end
-          -- If you use Conform: call its format function. Example:
-          -- vim.cmd("ConformFormat") -- or require("conform").format({ bufnr = bufnr })
-          -- Fallback to vim.lsp.buf.format if conform is not available:
-          local ok_conf, conform = pcall(require, "conform")
-          if ok_conf and conform and conform.format then
-            conform.format({ bufnr = bufnr })
-          else
-            -- prefer async formatting; limit to LSP/clients that still expose formatting
-            pcall(vim.lsp.buf.format, { bufnr = bufnr, timeout_ms = 2000 })
-          end
-        end,
-      })
-
       -- === Notes ===
       -- * If you want null-ls to be lazy-loaded, configure your plugin manager to load it on FileType or BufReadPre.
       -- * If performance becomes an issue, move heavy checks (like enabling eslint) into plugin loading logic.

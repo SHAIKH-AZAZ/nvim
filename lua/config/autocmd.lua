@@ -15,12 +15,22 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 })
 
 -- Highlight on yank
-vim.api.nvim_create_autocmd("TextYankPost", {
-	group = augroup("highlight_yank"),
-	callback = function()
-		(vim.hl or vim.highlight).on_yank()
-	end,
+-- vim.api.nvim_create_autocmd("TextYankPost", {
+-- 	group = augroup("highlight_yank"),
+-- 	callback = function()
+-- 		(vim.hl or vim.highlight).on_yank()
+-- 	end,
+-- })
+
+-- highlight yank my self
+vim.api.nvim_create_autocmd("TextYankPost",{
+    callback = function()
+        vim.highlight.on_yank()
+    end,
 })
+
+
+--
 
 -- resize splits if window got resized
 vim.api.nvim_create_autocmd({ "VimResized" }, {
@@ -214,4 +224,3 @@ end, { desc = "Open diagnostic in floating window " })
 
 -- Quick keymap to toggle line numbers
 -- vim.keymap.set("n", "<leader>un", "<cmd>LineNumbersToggle<cr>", { desc = "Toggle Line Numbers" })
-

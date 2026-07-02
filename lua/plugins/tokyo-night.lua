@@ -23,7 +23,5 @@ return {
 				hl.Comment = { fg = c.teal, italic = true }
 			end,
 		})
-
-		vim.cmd.colorscheme("tokyonight")
 	end,
 }

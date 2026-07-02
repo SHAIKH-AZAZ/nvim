@@ -1,6 +1,7 @@
 -- this is init file for lua configuration in this is the initial config first loaded 
 require("config.options")
 require("config.keymaps")
+require("config.autocmd")
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -29,3 +30,6 @@ require("lazy").setup("plugins", {
 		},
 	},
 })
+
+-- Apply the active colorscheme from one central place.
+require("current-theme")

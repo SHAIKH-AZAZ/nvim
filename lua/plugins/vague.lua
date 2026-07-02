@@ -37,7 +37,5 @@ return {
         hl.Comment = { fg = c.comment, italic = true }
       end,
     })
-
-    vim.cmd.colorscheme("vague")
   end,
 }
