@@ -14,21 +14,12 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 	end,
 })
 
--- Highlight on yank
--- vim.api.nvim_create_autocmd("TextYankPost", {
--- 	group = augroup("highlight_yank"),
--- 	callback = function()
--- 		(vim.hl or vim.highlight).on_yank()
--- 	end,
--- })
-
 -- highlight yank my self
-vim.api.nvim_create_autocmd("TextYankPost",{
-    callback = function()
-        vim.highlight.on_yank()
-    end,
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.highlight.on_yank()
+	end,
 })
-
 
 --
 
@@ -98,8 +89,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-
-
 -- make it easier to close man-files when opened inline
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup("man_unlisted"),
@@ -108,8 +97,6 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.bo[event.buf].buflisted = false
 	end,
 })
-
-
 
 -- wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd("FileType", {
@@ -120,7 +107,6 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.opt_local.spell = true
 	end,
 })
-
 
 -- Fix conceallevel for json files
 vim.api.nvim_create_autocmd({ "FileType" }, {
@@ -192,7 +178,6 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
 	end,
 })
 
-
 -- ========================================
 -- User Commands
 -- ========================================
@@ -203,7 +188,6 @@ vim.api.nvim_create_user_command("LineNumbersOn", function()
 	vim.notify("✓ Line numbers enabled", vim.log.levels.INFO)
 end, { desc = "Force enable line numbers" })
 
-
 -- Command to toggle line numbers
 vim.api.nvim_create_user_command("LineNumbersToggle", function()
 	vim.wo.number = not vim.wo.number
@@ -211,7 +195,6 @@ vim.api.nvim_create_user_command("LineNumbersToggle", function()
 	local status = vim.wo.number and "enabled" or "disabled"
 	vim.notify("Line numbers " .. status, vim.log.levels.INFO)
 end, { desc = "Toggle line numbers" })
-
 
 -- ========================================
 -- Custom Keymaps
