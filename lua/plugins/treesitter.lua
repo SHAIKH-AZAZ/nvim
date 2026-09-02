@@ -1,7 +1,4 @@
 -- Treesitter / syntax plugins
--- Based on: https://github.com/rafi/vim-config
-
-local has_git = vim.fn.executable("git") == 1
 
 return {
   ---------------------------------------------------------------------------
@@ -13,17 +10,6 @@ return {
   { "reasonml-editor/vim-reason-plus", ft = { "reason", "merlin" } },
 
   ---------------------------------------------------------------------------
-  -- which-key label for treesitter decrement selection
-  {
-    "folke/which-key.nvim",
-    opts = {
-      spec = {
-        { "V", desc = "Decrement Selection", mode = "x" },
-      },
-    },
-  },
-
-  ---------------------------------------------------------------------------
   -- Auto close / rename HTML and JSX tags
   {
     "windwp/nvim-ts-autotag",
@@ -32,106 +18,51 @@ return {
   },
 
   ---------------------------------------------------------------------------
+  -- Matchup — configured via globals now that the treesitter module is gone
+  {
+    "andymass/vim-matchup",
+    event = { "BufReadPost", "BufNewFile" },
+    init = function()
+      vim.g.matchup_matchparen_offscreen = {}
+    end,
+  },
+
+  ---------------------------------------------------------------------------
   -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
-    keys = {
-      { "<bs>", false, mode = "x" },
-      { "V", desc = "Decrement Selection", mode = "x" },
-    },
-    dependencies = {
-      {
-        "andymass/vim-matchup",
-        opts = {
-          matchparen = {
-            offscreen = {},
-          },
-        },
-      },
-    },
-    opts = {
-      sync_install = has_git,
-
-      highlight = {
-        enable = true,
-        disable = function(_, buf)
-          local max_filesize = 1024 * 1024 -- 1 MB
-          local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
-          return ok and stats and stats.size > max_filesize
-        end,
-      },
-
-      refactor = {
-        highlight_definitions = { enable = true },
-        highlight_current_scope = { enable = true },
-      },
-
-      matchup = {
-        enable = true,
-        include_match_words = true,
-      },
-
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = false,
-          node_decremental = "V",
-        },
-      },
-
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true,
-          keymaps = {
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
-            ["a,"] = "@parameter.outer",
-            ["i,"] = "@parameter.inner",
-          },
-        },
-
-        move = {
-          enable = true,
-          set_jumps = true,
-          goto_next_start = {
-            ["]f"] = "@function.outer",
-            ["]c"] = "@class.outer",
-            ["],"] = "@parameter.inner",
-          },
-          goto_next_end = {
-            ["]F"] = "@function.outer",
-            ["]C"] = "@class.outer",
-          },
-          goto_previous_start = {
-            ["[f"] = "@function.outer",
-            ["[c"] = "@class.outer",
-            ["[,"] = "@parameter.inner",
-          },
-          goto_previous_end = {
-            ["[F"] = "@function.outer",
-            ["[C"] = "@class.outer",
-          },
-        },
-
-        swap = {
-          enable = true,
-          swap_next = {
-            [">,"] = "@parameter.inner",
-          },
-          swap_previous = {
-            ["<,"] = "@parameter.inner",
-          },
-        },
-      },
-
-      ensure_installed = {
-        "comment",
+    branch = "main",
+    build = ":TSUpdate",
+    lazy = false, -- the main branch does not support lazy-loading
+    config = function()
+      require("nvim-treesitter").install({
+        -- core / nvim itself
+        "lua",
+        "luadoc",
+        "vim",
+        "vimdoc",
+        "query",
+        "regex",
+        "diff",
+        -- languages with an LSP configured in lsp.lua
+        "javascript",
+        "jsdoc",
+        "typescript",
+        "tsx",
+        "python",
+        "html",
         "css",
+        "json", -- jsonc filetypes map onto this parser
+        "svelte",
+        -- markup / config
+        "markdown",
+        "markdown_inline",
+        "yaml",
+        "toml",
+        "bash",
+        "dockerfile",
+        -- previously in ensure_installed
+        "comment",
         "csv",
         "cue",
         "dtd",
@@ -151,11 +82,79 @@ return {
         "scss",
         "sql",
         "ssh_config",
-        "svelte",
         "vhs",
         "zig",
         "zsh",
-      },
-    },
+      })
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("ts_highlight", { clear = true }),
+        callback = function(event)
+          local lang = vim.treesitter.language.get_lang(event.match)
+          if lang and vim.treesitter.language.add(lang) then
+            pcall(vim.treesitter.start, event.buf, lang)
+          end
+        end,
+      })
+    end,
+  },
+
+  ---------------------------------------------------------------------------
+  -- Treesitter textobjects — was configured but never installed, so af/if/ac/
+  -- ic and the ]f/[f motions have never actually worked. The main branch has
+  -- no keymap table either; they are set by hand.
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("nvim-treesitter-textobjects").setup({
+        select = { lookahead = true },
+        move = { set_jumps = true },
+      })
+
+      local select = require("nvim-treesitter-textobjects.select")
+      local move = require("nvim-treesitter-textobjects.move")
+      local swap = require("nvim-treesitter-textobjects.swap")
+
+      -- Select: af/if (function), ac/ic (class), a,/i, (parameter)
+      local selects = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+        ["a,"] = "@parameter.outer",
+        ["i,"] = "@parameter.inner",
+      }
+      for lhs, query in pairs(selects) do
+        vim.keymap.set({ "x", "o" }, lhs, function()
+          select.select_textobject(query, "textobjects")
+        end, { desc = "Select " .. query })
+      end
+
+      -- Move: ]f/[f and ]F/[F (function), ]c/[c and ]C/[C (class), ],/[, (param)
+      local moves = {
+        { move.goto_next_start, { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["],"] = "@parameter.inner" } },
+        { move.goto_next_end, { ["]F"] = "@function.outer", ["]C"] = "@class.outer" } },
+        { move.goto_previous_start, { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[,"] = "@parameter.inner" } },
+        { move.goto_previous_end, { ["[F"] = "@function.outer", ["[C"] = "@class.outer" } },
+      }
+      for _, spec in ipairs(moves) do
+        local goto_fn, maps = spec[1], spec[2]
+        for lhs, query in pairs(maps) do
+          vim.keymap.set({ "n", "x", "o" }, lhs, function()
+            goto_fn(query, "textobjects")
+          end, { desc = "Goto " .. query })
+        end
+      end
+
+      -- Swap parameters
+      vim.keymap.set("n", ">,", function()
+        swap.swap_next("@parameter.inner")
+      end, { desc = "Swap Next Parameter" })
+      vim.keymap.set("n", "<,", function()
+        swap.swap_previous("@parameter.inner")
+      end, { desc = "Swap Previous Parameter" })
+    end,
   },
 }

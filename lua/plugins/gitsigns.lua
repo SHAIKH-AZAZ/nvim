@@ -10,8 +10,8 @@ return {
   "lewis6991/gitsigns.nvim",
   event = { "BufReadPre", "BufNewFile" }, -- Lazy-load when editing files
   cond = function()
-    -- Only enable if inside a Git repo
-    return vim.fn.isdirectory(".git") == 1
+
+    return vim.fs.root(0, ".git") ~= nil
   end,
 
   config = function()
@@ -110,4 +110,3 @@ return {
     })
   end,
 }
-

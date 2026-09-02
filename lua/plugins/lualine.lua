@@ -64,12 +64,4 @@ return {
 			"quickfix", -- Quickfix list statusline
 		},
 	},
-	config = function(_, opts)
-		require("lualine").setup(opts)
-    vim.api.nvim_create_autocmd("ColorScheme", {
-      callback = function()
-        require("lualine").setup() -- reapply theme automatically
-      end,
-    })
-	end,
 }
